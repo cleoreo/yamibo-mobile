@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
