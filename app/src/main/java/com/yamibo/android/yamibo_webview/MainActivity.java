@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (Uri.parse(url).getHost().endsWith("bbs.yamibo.com")) {
+                    view.setVisibility(View.INVISIBLE);
                     return false;
                 }
 
@@ -87,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 mSwipeRefreshLayout.setRefreshing(false);
+                view.setVisibility(View.VISIBLE);
                 // load image after javascript is injected
                 view.getSettings().setLoadsImagesAutomatically(true);
             }
