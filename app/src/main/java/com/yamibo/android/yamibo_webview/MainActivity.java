@@ -1,6 +1,7 @@
 package com.yamibo.android.yamibo_webview;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -35,9 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
         webSettings.setAllowUniversalAccessFromFileURLs(true);
 
-        // Disable image loading
-        webSettings.setLoadsImagesAutomatically(false);
-
         // if external link is detected, ask to open by external browser
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
@@ -51,6 +49,14 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
 
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+
+                // disable Image Auto load for every page
+                view.getSettings().setLoadsImagesAutomatically(false);
+
+            }
 
             @Override
             public void onPageFinished(WebView view, String url) {
