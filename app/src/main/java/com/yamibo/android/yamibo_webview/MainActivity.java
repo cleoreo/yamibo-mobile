@@ -35,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
 
         webSettings.setAllowUniversalAccessFromFileURLs(true);
 
+        // Disable image loading
+        webSettings.setLoadsImagesAutomatically(false);
+
         // if external link is detected, ask to open by external browser
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
 
+                // inject javascript;
                 view.evaluateJavascript(readFromFile("jquery-3.3.1.min.js"), new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String value) {
@@ -65,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("", "value = " + value);
                     }
                 });
+
+                // load image after javascript is injected
+                view.getSettings().setLoadsImagesAutomatically(true);
             }
         });
 
