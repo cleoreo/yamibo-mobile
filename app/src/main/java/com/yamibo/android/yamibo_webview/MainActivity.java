@@ -69,6 +69,12 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("", "value = " + value);
                     }
                 });
+                view.evaluateJavascript(readFromFile("preview-image.min.js"), new ValueCallback<String>() {
+                    @Override
+                    public void onReceiveValue(String value) {
+                        Log.d("", "value = " + value);
+                    }
+                });
                 view.evaluateJavascript(readFromFile("main.js"), new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String value) {
