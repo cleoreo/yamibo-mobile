@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,12 +22,15 @@ import java.io.InputStreamReader;
 public class MainActivity extends AppCompatActivity {
 
     private WebView mWebView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) this.findViewById(R.id.swipeContainer);
         // init web view
         mWebView = (WebView) findViewById(R.id.activity_main_webview);
 
@@ -82,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
+                mSwipeRefreshLayout.setRefreshing(false);
                 // load image after javascript is injected
                 view.getSettings().setLoadsImagesAutomatically(true);
             }
@@ -90,6 +95,14 @@ public class MainActivity extends AppCompatActivity {
         mWebView.loadUrl("https://bbs.yamibo.com/forum.php?mobile=1");
 
 
+        mSwipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        mWebView.reload();
+                    }
+                }
+        );
     }
 
     public void onBackPressed() {
