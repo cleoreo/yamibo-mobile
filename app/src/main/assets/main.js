@@ -1,37 +1,36 @@
-
 var lastHash = window.location.hash;
 function runAfterLoad (){
     var imgArr = [];
-
-    $('html').find('script').filter(function(){
-        return $(this).attr('src') == 'https://bbs.yamibo.com/source/plugin/oyeeh_geo/template/js/geo.js';
+    jQuery('html').find('script').filter(function(){
+        return jQuery(this).attr('src') == 'https://bbs.yamibo.com/source/plugin/oyeeh_geo/template/js/geo.js';
     }).remove();
-    $('head').append('<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css"/>');
-    $('head').append('<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css"/>');
+    jQuery('head').append('<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css"/>');
+    jQuery('head').append('<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css"/>');
 
 
-    if (/\bmobile=1\b/.test (location.search) ) {
+    if (/\bmobile=1\b/.test (window.location.search) ) {
         /* Add CSS on page load */
-        $('head').append(customCSS());
+        jQuery('body').css('min-width', '100vw');
+        jQuery('head').append(customCSS());
 
         /* check logo exist and change it */
         new MutationObserver(function(mutations) {
-            $('.hd img').css('opacity', '0');
-            $('.hd img').attr('src', '/template/oyeeh_com_baihe/img/config/img/logo.png');
-            $('.hd img').css('opacity', '1');
+            jQuery('.hd img').css('opacity', '0');
+            jQuery('.hd img').attr('src', '/template/oyeeh_com_baihe/img/config/img/logo.png');
+            jQuery('.hd img').css('opacity', '1');
         }).observe(document, {childList: true, subtree: true});
 
         /* when document ready add html elements */
-        $(document).ready(function(){
+        jQuery(document).ready(function(){
             /* add back to top button and go to bottom button */
-            $('body').append("<div id='scroll-button'><a title='回最頂' class='go-to-top' onclick='window.scrollTo(0,0);'>></a><a title='去最底' class='go-to-bottom' onclick='window.scrollTo(0,document.body.scrollHeight);'>></a></div>");
-            $('body').append("<div id='history-button'><a title='回上頁' class='prev-page' onclick='window.history.back();'><</a><a title='下一頁' class='next-page' onclick='window.history.forward();'>></a></div>");
+            jQuery('body').append("<div id='scroll-button'><a title='回最頂' class='go-to-top' onclick='window.scrollTo(0,0);'>></a><a title='去最底' class='go-to-bottom' onclick='window.scrollTo(0,document.body.scrollHeight);'>></a></div>");
+            jQuery('body').append("<div id='history-button'><a title='回上頁' class='prev-page' onclick='window.history.back();'><</a><a title='下一頁' class='next-page' onclick='window.history.forward();'>></a></div>");
 
             if (/\b&fid=\b/.test (location.search) ) {
                 /* format post date and time */
-                $('.tl .bm_c .xg1').each(function(){
-                    var dateText = $.trim($(this).clone().children().remove().end().text());
-                    var linkElement = $(this).html().split('</a>')[0] + '</a>';
+                jQuery('.tl .bm_c .xg1').each(function(){
+                    var dateText = jQuery.trim(jQuery(this).clone().children().remove().end().text());
+                    var linkElement = jQuery(this).html().split('</a>')[0] + '</a>';
                     var newHtml = linkElement + '<div class="post-info"><span class="time">'+ dateText.split('回')[0] +' </span>';
                     if(dateText.split('回').length > 1){
                         newHtml += '<span class="no-of-reply">' + dateText.split('回')[1]+'</span>';
@@ -39,24 +38,24 @@ function runAfterLoad (){
                         newHtml += '<span class="no-of-reply">0</span>';
                     }
                     newHtml += '</div>';
-                    $(this).html(newHtml);
+                    jQuery(this).html(newHtml);
                 });
             }
             if (/\b&tid=\b/.test (location.search) ) {
-                $('body').append(photoSwipeHtml());
+                jQuery('body').append(photoSwipeHtml());
 
-                var allImageEl = $('.postmessage img:not([smilieid]), .box.box_ex2 img');
+                var allImageEl = jQuery('.postmessage img:not([smilieid]), .box.box_ex2 img');
                 allImageEl.each(function(i){
-                    if ($(this).parent().is('a')) {
-                        var largeImage = $(this).parent().attr('href');
-                        $(this).unwrap();
-                        $(this).attr('src', largeImage);
+                    if (jQuery(this).parent().is('a')) {
+                        var largeImage = jQuery(this).parent().attr('href');
+                        jQuery(this).unwrap();
+                        jQuery(this).attr('src', largeImage);
                     }
 
-                    $(this).addClass('gallery-image');
-                    $(this).attr('gallery-index', i);
+                    jQuery(this).addClass('gallery-image');
+                    jQuery(this).attr('gallery-index', i);
 
-                    var imgSrc = $(this).attr('src');
+                    var imgSrc = jQuery(this).attr('src');
                     var imgObj = {src: imgSrc, w: 0, h: 0};
                     imgArr.push(imgObj);
                 });
@@ -65,8 +64,8 @@ function runAfterLoad (){
                     if(imgArr.length == allImageEl.length){
                         console.log(imgArr);
 
-                        $('.gallery-image').click(function(){
-                            var index = parseInt($(this).attr('gallery-index'));
+                        jQuery('.gallery-image').click(function(){
+                            var index = parseInt(jQuery(this).attr('gallery-index'));
                             openGallery (index, imgArr);
                         });
 
@@ -75,10 +74,10 @@ function runAfterLoad (){
                 }, 100);
 
                 /* For Android back button close image previewer*/
-                $(window).bind('hashchange', function() {
+                jQuery(window).bind('hashchange', function() {
                     var newHash = window.location.hash;
                     if (lastHash == '#previeweropened') {
-                        $('.pswp__button--close').click();
+                        jQuery('.pswp__button--close').click();
                     }
                     lastHash = newHash;
                 });
@@ -86,14 +85,8 @@ function runAfterLoad (){
             }
         });
     }
-    else if(/\bmobile=2\b/.test (location.search)) {
-
-    }
-    else {
-        $('body').css('min-width', '980px');
-    }
-
 }
+
 runAfterLoad ();
 
 function customCSS (){
@@ -175,7 +168,7 @@ function customCSS (){
     #history-button{
         position: fixed;
         left: 15px;
-        bottom: 15px;
+        bottom: 25px;
         display: inline-block;
     }
 
@@ -245,7 +238,7 @@ function photoSwipeHtml(){
 }
 
 function openGallery (index, items){
-    var pswpElement = $('#pswp')[0];
+    var pswpElement = jQuery('#pswp')[0];
 
     var options = {
         history: false,
@@ -276,8 +269,8 @@ function openGallery (index, items){
 
     gallery.listen('close', function(){
         window.location.hash = '';
-        $('#pswp').remove();
-        $('body').append(photoSwipeHtml());
+        jQuery('#pswp').remove();
+        jQuery('body').append(photoSwipeHtml());
     });
 
     gallery.init();

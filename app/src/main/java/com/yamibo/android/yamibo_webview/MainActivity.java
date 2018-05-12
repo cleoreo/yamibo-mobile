@@ -52,21 +52,14 @@ public class MainActivity extends AppCompatActivity {
 
         // if external link is detected, ask to open by external browser
         mWebView.setWebViewClient(new WebViewClient() {
+            String mobile1 = "&mobile1=";
+            String mobile2 = "&mobile2=";
+
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (Uri.parse(url).getHost().endsWith("bbs.yamibo.com")) {
                     view.setVisibility(View.INVISIBLE);
 
-                    String mobile1 = "&mobile1=";
-                    String mobile2 = "&mobile2=";
-
-                    if (!url.toLowerCase().contains(mobile1.toLowerCase()) && !url.toLowerCase().contains(mobile2.toLowerCase())){
-                        view.getSettings().setBuiltInZoomControls(true);
-//                        view.getSettings().setDisplayZoomControls(false);
-                    }else {
-                        view.getSettings().setBuiltInZoomControls(false);
-//                        view.getSettings().setDisplayZoomControls(true);
-                    }
                     return false;
                 }
 
@@ -82,6 +75,15 @@ public class MainActivity extends AppCompatActivity {
                 // disable Image Auto load for every page
                 view.getSettings().setLoadsImagesAutomatically(false);
 
+                // disable zoom
+                view.getSettings().setBuiltInZoomControls(true);
+                view.getSettings().setDisplayZoomControls(false);
+
+                // if it is a desktop page
+                if (!url.toLowerCase().contains(mobile1.toLowerCase()) && !url.toLowerCase().contains(mobile2.toLowerCase())) {
+                    view.getSettings().setBuiltInZoomControls(false);
+                    view.getSettings().setDisplayZoomControls(true);
+                }
             }
 
             @Override
@@ -95,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("", "value = " + value);
                     }
                 });
+
                 view.evaluateJavascript(readFromFile("photoswipe.min.js"), new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String value) {
@@ -107,12 +110,21 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("", "value = " + value);
                     }
                 });
+
+                view.evaluateJavascript(readFromFile("desktop.js"), new ValueCallback<String>() {
+                    @Override
+                    public void onReceiveValue(String value) {
+                        Log.d("", "value = " + value);
+                    }
+                });
+
                 view.evaluateJavascript(readFromFile("main.js"), new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String value) {
                         Log.d("", "value = " + value);
                     }
                 });
+
 
                 mSwipeRefreshLayout.setRefreshing(false);
                 view.setVisibility(View.VISIBLE);
