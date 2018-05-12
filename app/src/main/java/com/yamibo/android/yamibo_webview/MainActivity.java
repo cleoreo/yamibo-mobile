@@ -1,18 +1,27 @@
 package com.yamibo.android.yamibo_webview;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Environment;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.DownloadListener;
 import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -75,7 +84,13 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("", "value = " + value);
                     }
                 });
-                view.evaluateJavascript(readFromFile("preview-image.min.js"), new ValueCallback<String>() {
+                view.evaluateJavascript(readFromFile("photoswipe.min.js"), new ValueCallback<String>() {
+                    @Override
+                    public void onReceiveValue(String value) {
+                        Log.d("", "value = " + value);
+                    }
+                });
+                view.evaluateJavascript(readFromFile("photoswipe-ui-default.min.js"), new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String value) {
                         Log.d("", "value = " + value);
@@ -95,6 +110,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        // download file handler
+        mWebView.setDownloadListener(new DownloadListener() {
+
+            @Override
+            public void onDownloadStart(String url, String userAgent,
+                                        String contentDisposition, String mimetype,
+                                        long contentLength) {
+                if (checkReadAndWriteExternalStoragePermission((Context)MainActivity.this)){
+                    DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+
+                    request.allowScanningByMediaScanner();
+                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED); //Notify client once download is completed!
+                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, url.substring(url.lastIndexOf('/') + 1, url.length()));
+                    DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                    dm.enqueue(request);
+                    Toast.makeText(getApplicationContext(), "Downloading File", //To notify the Client that the file is being downloaded
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         mWebView.loadUrl("https://bbs.yamibo.com/forum.php?mobile=1");
 
 
@@ -158,5 +194,12 @@ public class MainActivity extends AppCompatActivity {
 
         return ret;
     }
-
+    private static boolean checkReadAndWriteExternalStoragePermission(Context context){
+        if(ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            return false;
+        }else{
+            return true;
+        }
+    }
 }
