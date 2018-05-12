@@ -56,6 +56,17 @@ public class MainActivity extends AppCompatActivity {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (Uri.parse(url).getHost().endsWith("bbs.yamibo.com")) {
                     view.setVisibility(View.INVISIBLE);
+
+                    String mobile1 = "&mobile1=";
+                    String mobile2 = "&mobile2=";
+
+                    if (!url.toLowerCase().contains(mobile1.toLowerCase()) && !url.toLowerCase().contains(mobile2.toLowerCase())){
+                        view.getSettings().setBuiltInZoomControls(true);
+//                        view.getSettings().setDisplayZoomControls(false);
+                    }else {
+                        view.getSettings().setBuiltInZoomControls(false);
+//                        view.getSettings().setDisplayZoomControls(true);
+                    }
                     return false;
                 }
 
@@ -112,25 +123,25 @@ public class MainActivity extends AppCompatActivity {
 
 
         // download file handler
-        mWebView.setDownloadListener(new DownloadListener() {
+        mWebView.setDownloadListener(
+                new DownloadListener() {
+                    @Override
+                    public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+                        if (checkReadAndWriteExternalStoragePermission((Context) MainActivity.this)) {
+                            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
 
-            @Override
-            public void onDownloadStart(String url, String userAgent,
-                                        String contentDisposition, String mimetype,
-                                        long contentLength) {
-                if (checkReadAndWriteExternalStoragePermission((Context)MainActivity.this)){
-                    DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-
-                    request.allowScanningByMediaScanner();
-                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED); //Notify client once download is completed!
-                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, url.substring(url.lastIndexOf('/') + 1, url.length()));
-                    DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-                    dm.enqueue(request);
-                    Toast.makeText(getApplicationContext(), "Downloading File", //To notify the Client that the file is being downloaded
-                            Toast.LENGTH_LONG).show();
+                            request.allowScanningByMediaScanner();
+                            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED); //Notify client once download is completed!
+                            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, url.substring(url.lastIndexOf('/') + 1, url.length()));
+                            DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                            dm.enqueue(request);
+                            Toast.makeText(getApplicationContext(), "Downloading File", //To notify the Client that the file is being downloaded
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
                 }
-            }
-        });
+        );
+
         mWebView.loadUrl("https://bbs.yamibo.com/forum.php?mobile=1");
 
 
@@ -194,11 +205,12 @@ public class MainActivity extends AppCompatActivity {
 
         return ret;
     }
-    private static boolean checkReadAndWriteExternalStoragePermission(Context context){
-        if(ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+
+    private static boolean checkReadAndWriteExternalStoragePermission(Context context) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             return false;
-        }else{
+        } else {
             return true;
         }
     }

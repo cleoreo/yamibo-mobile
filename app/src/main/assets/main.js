@@ -1,3 +1,4 @@
+
 var lastHash = window.location.hash;
 function runAfterLoad (){
     var imgArr = [];
@@ -24,6 +25,7 @@ function runAfterLoad (){
         $(document).ready(function(){
             /* add back to top button and go to bottom button */
             $('body').append("<div id='scroll-button'><a title='回最頂' class='go-to-top' onclick='window.scrollTo(0,0);'>></a><a title='去最底' class='go-to-bottom' onclick='window.scrollTo(0,document.body.scrollHeight);'>></a></div>");
+            $('body').append("<div id='history-button'><a title='回上頁' class='prev-page' onclick='window.history.back();'><</a><a title='下一頁' class='next-page' onclick='window.history.forward();'>></a></div>");
 
             if (/\b&fid=\b/.test (location.search) ) {
                 /* format post date and time */
@@ -83,6 +85,12 @@ function runAfterLoad (){
 
             }
         });
+    }
+    else if(/\bmobile=2\b/.test (location.search)) {
+
+    }
+    else {
+        $('body').css('min-width', '980px');
     }
 
 }
@@ -164,12 +172,25 @@ function customCSS (){
         bottom: 30px;
     }
 
-    #scroll-button a {
+    #history-button{
+        position: fixed;
+        left: 15px;
+        bottom: 15px;
+        display: inline-block;
+    }
+
+    #history-button a {
+        display: inline-block;
+        float: left;
+    }
+
+    #scroll-button a, #history-button a {
         display: block;
         background: rgba(255, 255, 255, 0.8);
         border: 1px solid #DBC38C;
         border-radius: 3px;
-        padding: 5px 7px;
+        line-height: 100%;
+        padding: 7px 10px;
     }
 
     .go-to-top {
