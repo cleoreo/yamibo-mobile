@@ -1,6 +1,6 @@
+var imgArr = [];
 var lastHash = window.location.hash;
 function runAfterLoad (){
-    var imgArr = [];
     jQuery('html').find('script').filter(function(){
         return jQuery(this).attr('src') == 'https://bbs.yamibo.com/source/plugin/oyeeh_geo/template/js/geo.js';
     }).remove();
@@ -268,7 +268,9 @@ function openGallery (index, items){
     window.location.hash = 'previeweropened';
 
     gallery.listen('close', function(){
-        window.location.hash = '';
+        if (window.location.hash=='previeweropened') {
+            window.history.back();
+        }
         jQuery('#pswp').remove();
         jQuery('body').append(photoSwipeHtml());
     });
