@@ -1,97 +1,99 @@
 var imgArr = [];
 var lastHash = window.location.hash;
-function runAfterLoad (){
-    jQuery('html').find('script').filter(function(){
-        return jQuery(this).attr('src') == 'https://bbs.yamibo.com/source/plugin/oyeeh_geo/template/js/geo.js';
-    }).remove();
-    jQuery('head').append('<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css"/>');
-    jQuery('head').append('<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css"/>');
+
+function runAfterLoad () {
+	jQuery('html').find('script').filter(function () {
+		return jQuery(this).attr('src') == 'https://bbs.yamibo.com/source/plugin/oyeeh_geo/template/js/geo.js';
+	}).remove();
+	jQuery('head').append('<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css"/>');
+	jQuery('head').append('<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css"/>');
+	jQuery('head').append('<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">');
 
 
-    if (/\bmobile=1\b/.test (window.location.search) ) {
-        /* Add CSS on page load */
-        jQuery('body').css('min-width', '100vw');
-        jQuery('head').append(customCSS());
+	if (/\bmobile=1\b/.test(window.location.search)) {
+		/* Add CSS on page load */
+		jQuery('body').css('min-width', '100vw');
+		jQuery('head').append(customCSS());
 
-        /* check logo exist and change it */
-        new MutationObserver(function(mutations) {
-            jQuery('.hd img').css('opacity', '0');
-            jQuery('.hd img').attr('src', '/template/oyeeh_com_baihe/img/config/img/logo.png');
-            jQuery('.hd img').css('opacity', '1');
-        }).observe(document, {childList: true, subtree: true});
+		/* check logo exist and change it */
+		new MutationObserver(function (mutations) {
+			jQuery('.hd img').css('opacity', '0');
+			jQuery('.hd img').attr('src', '/template/oyeeh_com_baihe/img/config/img/logo.png');
+			jQuery('.hd img').css('opacity', '1');
+		}).observe(document, {childList: true, subtree: true});
 
-        /* when document ready add html elements */
-        jQuery(document).ready(function(){
-            /* add back to top button and go to bottom button */
-            jQuery('body').append("<div id='scroll-button'><a title='回最頂' class='go-to-top' onclick='window.scrollTo(0,0);'>></a><a title='去最底' class='go-to-bottom' onclick='window.scrollTo(0,document.body.scrollHeight);'>></a></div>");
-            jQuery('body').append("<div id='history-button'><a title='回上頁' class='prev-page' onclick='window.history.back();'><</a><a title='下一頁' class='next-page' onclick='window.history.forward();'>></a></div>");
+		/* when document ready add html elements */
+		jQuery(document).ready(function () {
+			/* add back to top button and go to bottom button */
+			jQuery('body').append('<div id=\'scroll-button\'><a title=\'回最頂\' class=\'go-to-top\' onclick=\'window.scrollTo(0,0);\'><i class="fa fa-angle-up" aria-hidden="true"></i></a><a title=\'去最底\' class=\'go-to-bottom\' onclick=\'window.scrollTo(0,document.body.scrollHeight);\'><i class="fa fa-angle-down" aria-hidden="true"></i></a></div>');
+			jQuery('body').append('<div id=\'history-button\'><a title=\'回上頁\' class=\'prev-page\' onclick=\'window.history.back();\'><</a><a title=\'下一頁\' class=\'next-page\' onclick=\'window.history.forward();\'>></a></div>');
 
-            if (/\b&fid=\b/.test (location.search) ) {
-                /* format post date and time */
-                jQuery('.tl .bm_c .xg1').each(function(){
-                    var dateText = jQuery.trim(jQuery(this).clone().children().remove().end().text());
-                    var linkElement = jQuery(this).html().split('</a>')[0] + '</a>';
-                    var newHtml = linkElement + '<div class="post-info"><span class="time">'+ dateText.split('回')[0] +' </span>';
-                    if(dateText.split('回').length > 1){
-                        newHtml += '<span class="no-of-reply">' + dateText.split('回')[1]+'</span>';
-                    }else{
-                        newHtml += '<span class="no-of-reply">0</span>';
-                    }
-                    newHtml += '</div>';
-                    jQuery(this).html(newHtml);
-                });
-            }
-            if (/\b&tid=\b/.test (location.search) ) {
-                jQuery('body').append(photoSwipeHtml());
+			if (/\b&fid=\b/.test(location.search)) {
+				/* format post date and time */
+				jQuery('.tl .bm_c .xg1').each(function () {
+					var dateText = jQuery.trim(jQuery(this).clone().children().remove().end().text());
+					var linkElement = jQuery(this).html().split('</a>')[0] + '</a>';
+					var newHtml = linkElement + '<div class="post-info"><span class="time">' + dateText.split('回')[0] + ' </span>';
+					if (dateText.split('回').length > 1) {
+						newHtml += '<span class="no-of-reply">' + dateText.split('回')[1] + '</span>';
+					} else {
+						newHtml += '<span class="no-of-reply">0</span>';
+					}
+					newHtml += '</div>';
+					jQuery(this).html(newHtml);
+				});
+			}
+			if (/\b&tid=\b/.test(location.search)) {
+				jQuery('body').append(photoSwipeHtml());
 
-                var allImageEl = jQuery('.postmessage img:not([smilieid]), .box.box_ex2 img');
-                allImageEl.each(function(i){
-                    if (jQuery(this).parent().is('a')) {
-                        var largeImage = jQuery(this).parent().attr('href');
-                        jQuery(this).unwrap();
-                        jQuery(this).attr('src', largeImage);
-                    }
+				var allImageEl = jQuery('.postmessage img:not([smilieid]), .box.box_ex2 img');
+				allImageEl.each(function (i) {
+					if (jQuery(this).parent().is('a')) {
+						var largeImage = jQuery(this).parent().attr('href');
+						jQuery(this).unwrap();
+						jQuery(this).attr('src', largeImage);
+					}
 
-                    jQuery(this).addClass('gallery-image');
-                    jQuery(this).attr('gallery-index', i);
+					jQuery(this).addClass('gallery-image');
+					jQuery(this).attr('gallery-index', i);
 
-                    var imgSrc = jQuery(this).attr('src');
-                    var imgObj = {src: imgSrc, w: 0, h: 0};
-                    imgArr.push(imgObj);
-                });
+					var imgSrc = jQuery(this).attr('src');
+					var imgObj = {src: imgSrc, w: 0, h: 0};
+					imgArr.push(imgObj);
+				});
 
-                var imgArrReady = setInterval(function(){
-                    if(imgArr.length == allImageEl.length){
-                        console.log(imgArr);
+				var imgArrReady = setInterval(function () {
+					if (imgArr.length == allImageEl.length) {
+						console.log(imgArr);
 
-                        jQuery('.gallery-image').click(function(){
-                            var index = parseInt(jQuery(this).attr('gallery-index'));
-                            openGallery (index, imgArr);
-                        });
+						jQuery('.gallery-image').click(function () {
+							var index = parseInt(jQuery(this).attr('gallery-index'));
+							openGallery(index, imgArr);
+						});
 
-                        clearInterval(imgArrReady);
-                    }
-                }, 100);
+						clearInterval(imgArrReady);
+					}
+				}, 100);
 
-                /* For Android back button close image previewer*/
-                jQuery(window).bind('hashchange', function() {
-                    var newHash = window.location.hash;
-                    if (lastHash == '#previeweropened') {
-                        jQuery('.pswp__button--close').click();
-                    }
-                    lastHash = newHash;
-                });
+				/* For Android back button close image previewer*/
+				jQuery(window).bind('hashchange', function () {
+					var newHash = window.location.hash;
+					if (lastHash == '#previeweropened') {
+						jQuery('.pswp__button--close').click();
+					}
+					lastHash = newHash;
+				});
 
-            }
-        });
-    }
+			}
+		});
+	}
 }
 
-runAfterLoad ();
+runAfterLoad();
 
-function customCSS (){
-    var standardCustomCss = `<style>`+
-    `body {
+function customCSS () {
+	var standardCustomCss = '<style>' +
+			'body {
         background-color: #FFF5D7;
     }
 
@@ -150,7 +152,7 @@ function customCSS (){
         display: inline-block;
     }
     .no-of-reply:before {
-        content: '回';
+        content: "回";
         position: absolute;
         right: 45px;
     }
@@ -185,21 +187,12 @@ function customCSS (){
         line-height: 100%;
         padding: 7px 10px;
     }
-
-    .go-to-top {
-        transform: rotate(-90deg);
-    }
-
-    .go-to-bottom {
-        transform: rotate(90deg);
-    }
-    </style>`;
-    return standardCustomCss.replace(" ", '').replace('\n', '');
+    </style>';
+	return standardCustomCss.replace(' ', '').replace('\n', '');
 }
 
-function photoSwipeHtml(){
-    return `<div id="pswp" class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
+function photoSwipeHtml () {
+	return '<div id="pswp" class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="pswp__bg"></div>
     <div class="pswp__scroll-wrap">
     <div class="pswp__container">
@@ -234,46 +227,46 @@ function photoSwipeHtml(){
     </div>
     </div>
     </div>
-    </div>`;
+    </div>';
 }
 
-function openGallery (index, items){
-    var pswpElement = jQuery('#pswp')[0];
+function openGallery (index, items) {
+	var pswpElement = jQuery('#pswp')[0];
 
-    var options = {
-        history: false,
-        focus: false,
-        showAnimationDuration: 0,
-        hideAnimationDuration: 0,
-        getDoubleTapZoom: 1,
-        fullscreenEl: false,
-        index: index,
-        shareButtons: [{id:'download', label:'Download image', url:'{{raw_image_url}}', download:true}],
-    };
+	var options = {
+		history: false,
+		focus: false,
+		showAnimationDuration: 0,
+		hideAnimationDuration: 0,
+		getDoubleTapZoom: 1,
+		fullscreenEl: false,
+		index: index,
+		shareButtons: [{id: 'download', label: 'Download image', url: '{{raw_image_url}}', download: true}],
+	};
 
-    var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+	var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
 
-    gallery.listen('gettingData', function(index, item) {
-        if (item.w < 1 || item.h < 1) {
-            var img = new Image();
-            img.onload = function() {
-                item.w = this.width;
-                item.h = this.height;
-                gallery.invalidateCurrItems();
-                gallery.updateSize(true);
-            };
-            img.src = item.src;
-        }
-    });
-    window.location.hash = 'previeweropened';
+	gallery.listen('gettingData', function (index, item) {
+		if (item.w < 1 || item.h < 1) {
+			var img = new Image();
+			img.onload = function () {
+				item.w = this.width;
+				item.h = this.height;
+				gallery.invalidateCurrItems();
+				gallery.updateSize(true);
+			};
+			img.src = item.src;
+		}
+	});
+	window.location.hash = 'previeweropened';
 
-    gallery.listen('close', function(){
-        if (window.location.hash=='previeweropened') {
-            window.history.back();
-        }
-        jQuery('#pswp').remove();
-        jQuery('body').append(photoSwipeHtml());
-    });
+	gallery.listen('close', function () {
+		if (window.location.hash == 'previeweropened') {
+			window.history.back();
+		}
+		jQuery('#pswp').remove();
+		jQuery('body').append(photoSwipeHtml());
+	});
 
-    gallery.init();
+	gallery.init();
 }
