@@ -43,7 +43,14 @@ function runAfterLoad (){
             if (/\b&tid=\b/.test (location.search) ) {
                 $('body').append(photoSwipeHtml());
 
-                $('.postmessage img:not([smilieid])').each(function(i){
+                var allImageEl = $('.postmessage img:not([smilieid]), .box.box_ex2 img');
+                allImageEl.each(function(i){
+                    if ($(this).parent().is('a')) {
+                        var largeImage = $(this).parent().attr('href');
+                        $(this).unwrap();
+                        $(this).attr('src', largeImage);
+                    }
+
                     $(this).addClass('gallery-image');
                     $(this).attr('gallery-index', i);
 
@@ -53,7 +60,7 @@ function runAfterLoad (){
                 });
 
                 var imgArrReady = setInterval(function(){
-                    if(imgArr.length == $('.postmessage img:not([smilieid])').length){
+                    if(imgArr.length == allImageEl.length){
                         console.log(imgArr);
 
                         $('.gallery-image').click(function(){
@@ -147,7 +154,7 @@ function customCSS (){
         right: 45px;
     }
 
-    .postmessage img{
+    .postmessage img, .box_ex2 img{
         max-width: 100%;
     }
 
@@ -246,7 +253,7 @@ function openGallery (index, items){
     });
     window.location.hash = 'previeweropened';
 
-    gallery.listen('destory', function(){
+    gallery.listen('close', function(){
         window.location.hash = '';
         $('#pswp').remove();
         $('body').append(photoSwipeHtml());
