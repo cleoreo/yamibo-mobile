@@ -39,9 +39,9 @@ function desktopLoadAtFirst() {
             });
         }
 
-        if (jQuery('#editorbox').length > 0 && getUrlParameter('action') == 'reply' && localStorage.getItem('quotedComment').length > 0) {
-            newEditor(1, bbcode2html(localStorage.getItem('quotedComment')));
-            localStorage.removeItem('quotedComment');
+        if (jQuery('#editorbox').length > 0 && getUrlParameter('action') == 'reply' && window.localStorage.getItem('quotedComment').length > 0) {
+            newEditor(1, bbcode2html(window.localStorage.getItem('quotedComment')));
+            window.localStorage.removeItem('quotedComment');
         }
     }
 }
@@ -64,16 +64,18 @@ function openReplyPageInNewTab(){
 
     var allQuoteComment = getAllQuoteComments();
     if (allQuoteComment != false) {
-        localStorage.setItem("quotedComment", allQuoteComment);
-        window.open(replyUrl, '_blank');
+        window.localStorage.setItem("quotedComment", allQuoteComment);
+        window.location.href = replyUrl;
+        /* window.open(replyUrl, '_blank'); */
     }
 
 }
 
 function copyAllQuoteComments(){
     var allQuoteComment = getAllQuoteComments();
+
     if (allQuoteComment != false) {
-        window.prompt("請按 Ctrl+C 以複製引用", allQuoteComment);
+        window.prompt("請複製引用", allQuoteComment);
     }
 }
 

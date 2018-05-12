@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.DownloadListener;
 import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -48,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
+        // Enable use of localStorage
+        webSettings.setDomStorageEnabled(true);
+
+        // Allow access to url
         webSettings.setAllowUniversalAccessFromFileURLs(true);
 
         // if external link is detected, ask to open by external browser
@@ -133,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // purpose: Show alert in web view
+        mWebView.setWebChromeClient(new WebChromeClient());
 
         // download file handler
         mWebView.setDownloadListener(
