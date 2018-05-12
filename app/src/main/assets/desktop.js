@@ -1,6 +1,6 @@
 function desktopLoadAtFirst () {
 	$.noConflict();
-	if (!/\bmobile=1\b/.test(window.location.search) && !/\bmobile=2\b/.test(window.location.search)) {
+	if (!/\bmobile=1\b/.test(window.location.search) && !/\bmobile=2\b/.test(window.location.search) && !/\bmobile=yes\b/.test(window.location.search)) {
 		/* Add Image overflow fixing CSS */
 		jQuery('body').css('min-width', '980px');
 		jQuery('head').append('<style>img { max-width: 100% !important; }</style>');
