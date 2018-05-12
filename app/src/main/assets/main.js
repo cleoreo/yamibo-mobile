@@ -22,6 +22,9 @@ function runAfterLoad () {
 			jQuery('.hd img').css('opacity', '1');
 		}).observe(document, {childList: true, subtree: true});
 
+        /* Add search link on top */
+        jQuery('.hd').append('<a href="https://bbs.yamibo.com/search.php?mod=forum&mobile=2" id="search-link">搜索</a>');
+
 		/* when document ready add html elements */
 		jQuery(document).ready(function () {
 			/* add back to top button and go to bottom button */
@@ -106,7 +109,11 @@ function customCSS () {
         opacity: 0;
         transition: all 1s;
     }
-
+    #search-link {
+        float: right;
+        color: #551200;
+        padding: 10px;
+    }
     a, .lkcss {
         color: #551200;
     }
