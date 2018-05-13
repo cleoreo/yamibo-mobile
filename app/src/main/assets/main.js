@@ -23,6 +23,9 @@ function runAfterLoad () {
     if (/\bmobile=1\b/.test(window.location.search)) {
         /* Add CSS on page load */
         jQuery('body').css('min-width', '100vw');
+        jQuery('body').addClass('day-theme');
+
+
         jQuery('head').append(customCSS());
 
         /* check logo exist and change it */
@@ -36,13 +39,55 @@ function runAfterLoad () {
         jQuery(document).ready(function () {
             /* Add search link on top */
             if (jQuery('#search-link').length == 0) {
-                jQuery('.hd').append('<a href="https://bbs.yamibo.com/search.php?mod=forum&mobile=2" id="search-link">搜索</a>');
+                jQuery('.wp .tz').append('<a href="https://bbs.yamibo.com/search.php?mod=forum&mobile=2" id="search-link">搜索</a>');
             }
 
             /* add back to top button and go to bottom button */
             jQuery('body').append('<div id=\'scroll-button\'><a title=\'回最頂\' class=\'go-to-top\' onclick=\'window.scrollTo(0,0);\'><i class="fa fa-angle-up" aria-hidden="true"></i></a><a title=\'去最底\' class=\'go-to-bottom\' onclick=\'window.scrollTo(0,document.body.scrollHeight);\'><i class="fa fa-angle-down" aria-hidden="true"></i></a></div>');
             jQuery('body').append('<div id=\'history-button\'><a title=\'回上頁\' class=\'prev-page\' onclick=\'window.history.back();\'><</a><a title=\'下一頁\' class=\'next-page\' onclick=\'window.history.forward();\'>></a></div>');
 
+            /* add menu button */
+            jQuery('.hd').append('<button id="menu-btn"><div></div><div></div><div></div></button>');
+            jQuery('#menu-btn').click(function(){
+                jQuery('body').toggleClass('menu-opened');
+                window.scrollTo(0,0);
+            });
+
+            /* add side menu */
+            jQuery('body').append(sideMenuHtml());
+
+            /* add side menu listener */
+            /* theme listener*/
+            jQuery('#theme').change(function() {
+                if (jQuery(this).is(":checked")) {
+                    window.localStorage.setItem("theme", "night");
+                } else {
+                    window.localStorage.setItem("theme", "day");
+                }
+                checkAndUpdateSetting();
+            });
+            /* font-size listener */
+            jQuery('input[name=ftsize]').change(function() {
+                window.localStorage.setItem("ftsize", jQuery(this).val());
+                checkAndUpdateSetting();
+            });
+            /* language listener */
+            jQuery('input[name=language]').change(function() {
+                window.localStorage.setItem("language", jQuery(this).val());
+                if (jQuery(this).val() == "none") {
+                    window.location.reload();
+                }
+                checkAndUpdateSetting();
+            });
+            checkAndUpdateSetting();
+
+            jQuery('#side-menu').click(function(e){
+                if (e.target == this){
+                    jQuery('body').removeClass('menu-opened');
+                }
+            });
+
+            /* when inside a forum page */
             if (/\b&fid=\b/.test(window.location.search)) {
                 /* format post date and time */
                 jQuery('.tl .bm_c .xg1').each(function () {
@@ -121,7 +166,7 @@ function runAfterLoad () {
                                 href = href + '?mobile=1';
                             }
                         }
-                        $(this).attr('href', href);
+                        jQuery(this).attr('href', href);
                     }
                 });
 
@@ -151,21 +196,91 @@ function runAfterLoad () {
 }
 
 function customCSS () {
-	var standardCustomCss = '<style>' +
-			'body {
+    var standardCustomCss = '<style>' +
+    'body.day-theme {
         background-color: #FFF5D7;
     }
-
-    .copy-link {
-            width: 100%;
-        border: 1px solid #551200;
+    .day-theme #menu-btn div {
         background-color: #551200;
-        color: #ffffff;
-        padding: 10px;
+    }
+    .day-theme .hd {
+      border-color: #551200;
+    }
+    .day-theme a, .day-theme .lkcss {
+      color: #551200;
+    }
+    .day-theme #search-link {
+      color: #551200;
+    }
+    .day-theme .box {
+      background-color: #FFE;
+    }
+    .day-theme .bm .bm_h {
+      background-color: #551200 !important;
+    }
+    .day-theme .even {
+      background-color: #fff6d7;
+    }
+    .day-theme .bm .bm_c {
+      border-color: #DBC38C;
+    }
+    .day-theme .bm_c:nth-child(even) {
+      background-color: #ffedbb;
     }
 
-    .hd {
-        border-color: #551200;
+
+    body.night-theme {
+      background-color: #0b0704;
+      color: #a3948f;
+      --link-color: rgb(161, 146, 18) !important;
+      --link-color-hover: rgb(179, 163, 20) !important;
+      --link-color-active: rgb(147, 134, 16) !important;
+      --visited-color: rgb(161, 125, 18) !important;
+      --visited-color-hover: rgb(179, 139, 20) !important;
+      --visited-color-active: rgb(147, 114, 16) !important;
+    }
+    .night-theme .hd {
+        border-color: #7e5f54;
+    }
+    .night-theme #menu-btn div {
+        background-color: #94837d;
+    }
+    .night-theme a, .night-theme .lkcss {
+        color: #a16c12;
+    }
+    .night-theme .box {
+        background-color: #1c0e09;
+    }
+    .night-theme .bm .bm_h {
+        background-color: #1c0e09 !important;
+        color: #a3948f;
+    }
+    .night-theme .bm .bm_h a {
+        color: #A18C11;
+    }
+    .night-theme .bm .bm_inf {
+        border-color: #87665a;
+        background-color: #2b201d;
+    }
+    .night-theme .bm_c .bm_user {
+        border-color: #87665a;
+        background-color: #2b201d;
+    }
+    .night-theme .even {
+        background-color: #291a0a;
+    }
+    .night-theme .bm .bm_c {
+        border-color: #7e5f54 !important;
+    }
+    .night-theme div[id^=post] {
+        background-color: #0b0704 !important;
+    }
+    .night-theme .bm_c:nth-child(even) {
+        background-color: #291a0a;
+    }
+    .night-theme input, .night-theme textarea {
+        background: #2b201d;
+        color: #a3948f;
     }
 
     .hd img {
@@ -173,34 +288,82 @@ function customCSS () {
         opacity: 0;
         transition: all 1s;
     }
-    #search-link {
+    #menu-btn {
+        background: transparent;
+        border: none;
+        padding: 0 5px;
         float: right;
-        color: #551200;
+    }
+    #menu-btn div {
+        width: 25px;
+        height: 3px;
+        margin: 6px 0;
+        transition: all 0.4s;
+    }
+    #menu-btn div:first-of-type {
+       transform-origin: 100% 100%;
+    }
+    #menu-btn div:last-of-type {
+       transform-origin: 100% 0;
+    }
+    .menu-opened #menu-btn div {
+        opacity: 0;
+    }
+    .menu-opened #menu-btn div:first-of-type {
+        transform: rotate(-45deg);
+        opacity: 1;
+    }
+    .menu-opened #menu-btn div:last-of-type {
+        transform: rotate(45deg);
+        opacity: 1;
+    }
+    .menu-opened {
+        overflow: hidden;
+    }
+    .menu-opened #side-menu {
+        left: 0;
+    }
+    #side-menu {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: -100%;
+        top: 0;
+        background-color: rgba(0,0,0,0.6);
+    }
+    #side-menu >div{
+        display: block;
+        width: 60%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        transition: all 1s;
+        background-color: #16110f;
+        border-right: 1px solid #856559;
+        color: #a16c12;
+    }
+    #side-menu .menu-item {
         padding: 10px;
     }
-    a, .lkcss {
-        color: #551200;
+    #side-menu .language-div, #side-menu .ftsize-div {
+        padding: 0;
     }
-
-    .box {
-        background-color: #FFE;
+    #side-menu .menu-item label{
+        display: block;
+        margin: 10px 20px;
     }
-
-    .bm .bm_h {
-        background-color: #551200 !important;
+    #side-menu .menu-item span {
+        padding-right: 5px;
     }
-
-    .even {
-        background-color: #fff6d7;
+    #side-menu .theme-div label{
+        display: inline-block;
+        margin: 0;
     }
-    .bm .bm_c {
-        border-color: #DBC38C
+    #search-link {
+        float: right;
     }
-
-    .bm_c:nth-child(even) {
-        background-color: rgb(255, 237, 187);
-    }
-
     .tl .bm_c .xg1 {
         display: inline-block;
         width: 100%;
@@ -262,12 +425,66 @@ function customCSS () {
         margin-bottom: 300px;
         margin-bottom: 40vh;
     }
+
+    .copy-link {
+        width: 100%;
+        border: 1px solid #551200;
+        background-color: #551200;
+        color: #ffffff;
+        padding: 10px;
+    }
+
+    input[type="text"], input[type="submit"], textarea {
+        padding: 5px !important;
+        width: calc(100% - 12px) !important;
+    }
+
+    input[type="submit"] {
+        width: 100% !important;
+    }
+    div.checkbox.switcher label, div.radio.switcher label {
+      padding: 0;
+    }
+    div.checkbox.switcher label *, div.radio.switcher label * {
+      vertical-align: middle;
+    }
+    div.checkbox.switcher label input, div.radio.switcher label input {
+      display: none;
+    }
+    div.checkbox.switcher label input + span, div.radio.switcher label input + span {
+      position: relative;
+      display: inline-block;
+      margin-right: 10px;
+      width: 2rem;
+      height: 1rem;
+      background: #BBB;
+      border: 1px solid #eee;
+      border-radius: 50px;
+      transition: all 0.3s ease-in-out;
+    }
+    div.checkbox.switcher label input + span small, div.radio.switcher label input + span small {
+      position: absolute;
+      display: block;
+      width: 50%;
+      height: 100%;
+      background: #fff;
+      border-radius: 50%;
+      transition: all 0.3s ease-in-out;
+      left: 0;
+    }
+    div.checkbox.switcher label input:checked + span, div.radio.switcher label input:checked + span {
+      background: #269bff;
+      border-color: #269bff;
+    }
+    div.checkbox.switcher label input:checked + span small, div.radio.switcher label input:checked + span small {
+      left: 50%;
+    }
     </style>';
-	return standardCustomCss.replace(' ', '').replace('\n', '');
+    return standardCustomCss.replace(' ', '').replace('\n', '');
 }
 
 function photoSwipeHtml () {
-	return '<div id="pswp" class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    return '<div id="pswp" class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="pswp__bg"></div>
     <div class="pswp__scroll-wrap">
     <div class="pswp__container">
@@ -305,47 +522,127 @@ function photoSwipeHtml () {
     </div>';
 }
 
+function sideMenuHtml () {
+    return '<div id="side-menu">
+    <div>
+        <div class="menu-item">
+            <h4>閱讀設定：</h4>
+        </div>
+        <div class="menu-item theme-div">
+            <div class="checkbox switcher">
+                <label for="theme">
+                    <span>夜間模式： </span>
+                    <input type="checkbox" id="theme" name="theme">
+                    <span><small></small></span>
+                </label>
+            </div>
+        </div>
+        <div class="menu-item">
+            <p>字體大小：</p>
+        </div>
+        <div class="menu-item ftsize-div">
+            <label><span>小 </span>
+                <input type="radio" name="ftsize" value="S">
+            </label>
+            <label><span>中 </span>
+                <input type="radio" name="ftsize" value="M" checked>
+            </label>
+            <label><span>大 </span>
+                <input type="radio" name="ftsize" value="L">
+            </label>
+        </div>
+        <hr>
+        <div class="menu-item">
+            <h4>語言設定：</h4>
+        </div>
+        <div class="menu-item language-div">
+            <label><span>繁 </span>
+                <input type="radio" name="language" value="tc">
+            </label>
+            <label><span>簡 </span>
+                <input type="radio" name="language" value="sc">
+            </label>
+            <label><span>無 </span>
+                <input type="radio" name="language" value="none" checked>
+            </label>
+        </div>
+    </div>
+</div>';
+}
+
+function checkAndUpdateSetting() {
+    /* checking for theme */
+    if (window.localStorage.getItem("theme") == "night") {
+        jQuery('body').addClass('night-theme');
+        jQuery('body').removeClass('day-theme');
+        jQuery('#theme').prop('checked', true);
+    }else {
+        window.localStorage.setItem("theme", "day");
+        jQuery('body').addClass('day-theme');
+        jQuery('body').removeClass('night-theme');
+    }
+
+    /* checking for font size */
+    if (window.localStorage.getItem("ftsize") == "S") {
+        jQuery('body').css('font-size', '8pt');
+    }else if (window.localStorage.getItem("ftsize") == "L") {
+        jQuery('body').css('font-size', '12pt');
+    }else{
+        window.localStorage.setItem("ftsize", "M");
+        jQuery('body').css('font-size', '10pt');
+    }
+
+    /* checking for language */
+    if (window.localStorage.getItem("language") == "sc") {
+        jQuery('body').t2s();
+    }else if (window.localStorage.getItem("language") == "tc") {
+        jQuery('body').s2t();
+    }else{
+        window.localStorage.setItem("language", "none");
+    }
+}
+
 function openGallery (index, items) {
-	var pswpElement = jQuery('#pswp')[0];
+    var pswpElement = jQuery('#pswp')[0];
 
-	var options = {
-		history: false,
-		focus: false,
-		showAnimationDuration: 0,
-		hideAnimationDuration: 0,
-		getDoubleTapZoom: 1,
-		fullscreenEl: false,
-		index: index,
-		loadingIndicatorDelay: 500,
-		errorMsg: '<div class="pswp__error-msg">此圖片無法載入</div>',
-		shareButtons: [{id: 'download', label: '下載', url: '{{raw_image_url}}', download: true}],
-	};
+    var options = {
+        history: false,
+        focus: false,
+        showAnimationDuration: 0,
+        hideAnimationDuration: 0,
+        getDoubleTapZoom: 1,
+        fullscreenEl: false,
+        index: index,
+        loadingIndicatorDelay: 500,
+        errorMsg: '<div class="pswp__error-msg">此圖片無法載入</div>',
+        shareButtons: [{id: 'download', label: '下載', url: '{{raw_image_url}}', download: true}],
+    };
 
-	var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+    var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
 
-	gallery.listen('gettingData', function (index, item) {
-		if (item.w < 1 || item.h < 1) {
-			var img = new Image();
-			img.onload = function () {
-				item.w = this.width;
-				item.h = this.height;
-				gallery.invalidateCurrItems();
-				gallery.updateSize(true);
-			};
-			img.src = item.src;
-		}
-	});
-	window.location.hash = 'previeweropened';
+    gallery.listen('gettingData', function (index, item) {
+        if (item.w < 1 || item.h < 1) {
+            var img = new Image();
+            img.onload = function () {
+                item.w = this.width;
+                item.h = this.height;
+                gallery.invalidateCurrItems();
+                gallery.updateSize(true);
+            };
+            img.src = item.src;
+        }
+    });
+    window.location.hash = 'previeweropened';
 
-	gallery.listen('close', function () {
-		if (window.location.hash == '#previeweropened') {
-			window.history.back();
-		}
-		jQuery('#pswp').remove();
-		jQuery('body').append(photoSwipeHtml());
-	});
+    gallery.listen('close', function () {
+        if (window.location.hash == '#previeweropened') {
+            window.history.back();
+        }
+        jQuery('#pswp').remove();
+        jQuery('body').append(photoSwipeHtml());
+    });
 
-	gallery.init();
+    gallery.init();
 }
 
 function textAreaAutoGrow () {
