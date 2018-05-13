@@ -118,6 +118,20 @@ function runAfterLoad () {
                         console.log(href);
                     }
                 });
+
+                /* change post link of reply form at bottom to mobile=1 */
+                var posturl = jQuery('#fastpostform').attr('action');
+                posturl = posturl.replace('mobile=yes', 'mobile=1');
+                jQuery('#fastpostform').attr('action', posturl);
+            }
+
+            /* when inside the reply page*/
+            if (/\baction=reply\b/.test(window.location.search)) {
+
+                /* change post form url to mobile=1 */
+                var posturl = jQuery('#postform').attr('action');
+                posturl = posturl.replace('mobile=yes', 'mobile=1');
+                jQuery('#postform').attr('action', posturl);
             }
         });
     }
