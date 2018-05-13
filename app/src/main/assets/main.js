@@ -114,8 +114,6 @@ function runAfterLoad () {
                             }
                         }
                         $(this).attr('href', href);
-                    } else {
-                        console.log(href);
                     }
                 });
 
