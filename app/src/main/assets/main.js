@@ -52,7 +52,7 @@ function runAfterLoad () {
             }
 
             /* when inside a post */
-            if (/\b&tid=\b/.test(window.location.search) || /\bthread\b/.test(window.location.href)) {
+            if ( (/\b&tid=\b/.test(window.location.search) || /\bthread\b/.test(window.location.href)) && ! /\baction=reply\b/.test(window.location.search) ) {
                 /* handle keyboard cover comment box */
                 jQuery('body').addClass('is-post');
 
@@ -121,6 +121,10 @@ function runAfterLoad () {
                 var posturl = jQuery('#fastpostform').attr('action');
                 posturl = posturl.replace('mobile=yes', 'mobile=1');
                 jQuery('#fastpostform').attr('action', posturl);
+
+                /* Make reply box height auto grow */
+                textAreaAutoGrow();
+
             }
 
             /* when inside the reply page*/
@@ -130,6 +134,9 @@ function runAfterLoad () {
                 var posturl = jQuery('#postform').attr('action');
                 posturl = posturl.replace('mobile=yes', 'mobile=1');
                 jQuery('#postform').attr('action', posturl);
+
+                /* Make reply box height auto grow */
+                textAreaAutoGrow();
             }
         });
     }
@@ -323,4 +330,14 @@ function openGallery (index, items) {
 	});
 
 	gallery.init();
+}
+
+function textAreaAutoGrow () {
+    var textarea = jQuery('textarea')[0];
+    var heightLimit = 800;
+
+    textarea.oninput = function() {
+        textarea.style.height = "";
+        textarea.style.height = Math.min(textarea.scrollHeight, heightLimit) + "px";
+    };
 }
