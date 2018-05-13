@@ -103,12 +103,20 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
+                view.evaluateJavascript(readFromFile("clipboard.min.js"), new ValueCallback<String>() {
+                    @Override
+                    public void onReceiveValue(String value) {
+                        Log.d("", "value = " + value);
+                    }
+                });
+
                 view.evaluateJavascript(readFromFile("photoswipe.min.js"), new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String value) {
                         Log.d("", "value = " + value);
                     }
                 });
+
                 view.evaluateJavascript(readFromFile("photoswipe-ui-default.min.js"), new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String value) {
