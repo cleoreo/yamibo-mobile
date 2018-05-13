@@ -1,3 +1,5 @@
+desktopLoadAtFirst();
+
 function desktopLoadAtFirst () {
 	$.noConflict();
 	if (!/\bmobile=1\b/.test(window.location.search) && !/\bmobile=2\b/.test(window.location.search) && !/\bmobile=yes\b/.test(window.location.search)) {
@@ -46,8 +48,6 @@ function desktopLoadAtFirst () {
 		}
 	}
 }
-
-desktopLoadAtFirst();
 
 function addCheckbox () {
 	var commentDivs = jQuery('#postlist >div[id^="post_"]');
