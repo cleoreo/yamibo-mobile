@@ -257,7 +257,9 @@ function openGallery (index, items) {
 		getDoubleTapZoom: 1,
 		fullscreenEl: false,
 		index: index,
-		shareButtons: [{id: 'download', label: 'Download image', url: '{{raw_image_url}}', download: true}],
+		loadingIndicatorDelay: 500,
+		errorMsg: '<div class="pswp__error-msg">此圖片無法載入</div>',
+		shareButtons: [{id: 'download', label: '下載', url: '{{raw_image_url}}', download: true}],
 	};
 
 	var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
@@ -277,7 +279,7 @@ function openGallery (index, items) {
 	window.location.hash = 'previeweropened';
 
 	gallery.listen('close', function () {
-		if (window.location.hash == 'previeweropened') {
+		if (window.location.hash == '#previeweropened') {
 			window.history.back();
 		}
 		jQuery('#pswp').remove();
