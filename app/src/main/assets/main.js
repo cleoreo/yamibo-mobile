@@ -46,28 +46,33 @@ function runAfterLoad () {
 					jQuery(this).html(newHtml);
 				});
 			}
+
+			/* when inside a post */
 			if (/\b&tid=\b/.test(location.search)) {
+			    /* handle keyboard cover comment box */
+			    jQuery('body').addClass('is-post');
+
+			    /* add image previewer */
 				jQuery('body').append(photoSwipeHtml());
 
 				var allImageEl = jQuery('.postmessage img:not([smilieid]), .box.box_ex2 img');
 				allImageEl.each(function (i) {
-					if (jQuery(this).parent().is('a')) {
-						var largeImage = jQuery(this).parent().attr('href');
-						jQuery(this).unwrap();
-						jQuery(this).attr('src', largeImage);
-					}
-
-					jQuery(this).addClass('gallery-image');
-					jQuery(this).attr('gallery-index', i);
-
 					var imgSrc = jQuery(this).attr('src');
-					var imgObj = {src: imgSrc, w: 0, h: 0};
-					imgArr.push(imgObj);
+                    if (jQuery(this).parent().is('a')) {
+                        var largeImage = jQuery(this).parent().attr('href');
+                        jQuery(this).unwrap();
+                        imgSrc = largeImage;
+                    }
+
+                    jQuery(this).addClass('gallery-image');
+                    jQuery(this).attr('gallery-index', i);
+
+                    var imgObj = {src: imgSrc, w: 0, h: 0};
+                    imgArr.push(imgObj);
 				});
 
 				var imgArrReady = setInterval(function () {
 					if (imgArr.length == allImageEl.length) {
-						console.log(imgArr);
 
 						jQuery('.gallery-image').click(function () {
 							var index = parseInt(jQuery(this).attr('gallery-index'));
@@ -193,6 +198,10 @@ function customCSS () {
         border-radius: 3px;
         line-height: 100%;
         padding: 7px 10px;
+    }
+    .is-post .ft {
+        margin-bottom: 300px;
+        margin-bottom: 40vh;
     }
     </style>';
 	return standardCustomCss.replace(' ', '').replace('\n', '');
