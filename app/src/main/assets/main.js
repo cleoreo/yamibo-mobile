@@ -184,9 +184,9 @@ function runAfterLoad () {
             if (/\baction=reply\b/.test(window.location.search)) {
 
                 /* change post form url to mobile=1 */
-                var posturl = jQuery('#postform').attr('action');
-                posturl = posturl.replace('mobile=yes', 'mobile=1');
-                jQuery('#postform').attr('action', posturl);
+                var replyurl = jQuery('#postform').attr('action');
+                replyurl = replyurl.replace('mobile=yes', 'mobile=1');
+                jQuery('#postform').attr('action', replyurl);
 
                 /* Make reply box height auto grow */
                 textAreaAutoGrow();
@@ -237,17 +237,20 @@ function customCSS () {
     .day-theme .bm_c:nth-child(even) {
       background-color: #ffedbb;
     }
-
+    .day-theme #scroll-button a, .day-theme #history-button a {
+        background-color: rgba(255, 255, 255, 0.8) !important;
+        border: 1px solid #DBC38C;
+    }
 
     body.night-theme {
-      background-color: #0b0704;
+      background-color: #0b0704 !important;
       color: #a3948f;
-      --link-color: rgb(161, 146, 18) !important;
-      --link-color-hover: rgb(179, 163, 20) !important;
-      --link-color-active: rgb(147, 134, 16) !important;
-      --visited-color: rgb(161, 125, 18) !important;
-      --visited-color-hover: rgb(179, 139, 20) !important;
-      --visited-color-active: rgb(147, 114, 16) !important;
+      --link-color: rgb(161, 146, 18);
+      --link-color-hover: rgb(179, 163, 20);
+      --link-color-active: rgb(147, 134, 16);
+      --visited-color: rgb(161, 125, 18);
+      --visited-color-hover: rgb(179, 139, 20);
+      --visited-color-active: rgb(147, 114, 16);
     }
     .night-theme .hd {
         border-color: #7e5f54;
@@ -291,6 +294,14 @@ function customCSS () {
     .night-theme input, .night-theme textarea {
         background: #2b201d;
         color: #a3948f;
+    }
+    .night-theme {
+        background-color: rgba(43, 32, 29, 0.8) !important;
+    }
+    .night-theme #scroll-button a, .night-theme #history-button a {
+        background-color: rgba(43, 32, 29, 0.8) !important;
+        border: 1px solid #DBC38C;
+        color: #a19212;
     }
 
     .hd img {
@@ -428,8 +439,6 @@ function customCSS () {
 
     #scroll-button a, #history-button a {
         display: block;
-        background: rgba(255, 255, 255, 0.8);
-        border: 1px solid #DBC38C;
         border-radius: 3px;
         line-height: 100%;
         padding: 7px 10px;
