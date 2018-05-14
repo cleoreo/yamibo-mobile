@@ -50,10 +50,6 @@ function runAfterLoad () {
 
         /* when document ready add html elements */
         jQuery(document).ready(function () {
-            /* Add search link on top */
-            if (jQuery('#search-link').length == 0) {
-                jQuery('.wp .tz').append('<a href="https://bbs.yamibo.com/search.php?mod=forum&mobile=2" id="search-link">搜索</a>');
-            }
 
             /* add back to top button and go to bottom button */
             jQuery('body').append('<div id=\'scroll-button\'><a title=\'回最頂\' class=\'go-to-top\' onclick=\'window.scrollTo(0,0);\'><i class="fa fa-angle-up" aria-hidden="true"></i></a><a title=\'去最底\' class=\'go-to-bottom\' onclick=\'window.scrollTo(0,document.body.scrollHeight);\'><i class="fa fa-angle-down" aria-hidden="true"></i></a></div>');
@@ -71,6 +67,16 @@ function runAfterLoad () {
             /* add side menu */
             if (jQuery('#side-menu').length == 0) {
                 jQuery('body').append(sideMenuHtml());
+            }
+
+            /* move logout link to side menu */
+            jQuery('#logout').html(jQuery('.wp .pd2 a').last()[0].outerHTML);
+            if (jQuery('.wp .pd2 a').length > 1) {
+                jQuery('.wp .pd2 a:last').remove();
+            }
+            /* Add search link on top */
+            if (jQuery('#search-link').length == 0) {
+                jQuery('.wp .pd2').append('<a href="https://bbs.yamibo.com/search.php?mod=forum&mobile=2" id="search-link">搜索</a>');
             }
 
             /* add side menu listener */
@@ -348,11 +354,17 @@ function customCSS () {
         border: 1px solid #DBC38C;
         color: #a19212;
     }
+    .night-theme select {
+        color: #a16c12;
+    }
 
     .hd img {
         height: 30px;
         opacity: 0;
         transition: all 1s;
+    }
+    .pipe {
+        margin: 0 2px;
     }
     #menu-btn {
         background: transparent;
@@ -392,6 +404,9 @@ function customCSS () {
     .menu-opened #side-menu {
         left: 0;
     }
+    .menu-opened #side-menu #logout{
+        position: fixed;
+    }
     #side-menu {
         display: block;
         width: 100%;
@@ -403,7 +418,8 @@ function customCSS () {
     }
     #side-menu >div{
         display: block;
-        width: 60%;
+        width: 70%;
+        width: 70vw;
         height: 100%;
         position: absolute;
         left: 0;
@@ -414,9 +430,13 @@ function customCSS () {
         color: #a16c12;
         overflow: auto;
         max-height: 100%;
+        padding-bottom: 3rem;
     }
     #side-menu .menu-item {
         padding: 10px;
+    }
+    #side-menu .menu-item.last {
+        margin-bottom: 3rem;
     }
     #side-menu .language-div, #side-menu .ftsize-div {
         padding: 0;
@@ -431,6 +451,15 @@ function customCSS () {
     #side-menu .switcher-div label{
         display: inline-block;
         margin: 0;
+    }
+    #side-menu #logout {
+        bottom: 0;
+        left: 0;
+        width: calc(70vw - 20px);
+        height: auto;
+        padding: 10px;
+        border-top: 3px solid #a16c12;
+        background-color: #16110f;
     }
     #search-link {
         float: right;
@@ -513,6 +542,7 @@ function customCSS () {
     input[type="submit"] {
         width: 100% !important;
     }
+
     div.checkbox.switcher label, div.radio.switcher label {
       padding: 0;
     }
@@ -649,6 +679,10 @@ function sideMenuHtml () {
                     <span><small></small></span>
                 </label>
             </div>
+        </div>
+        <div class="menu-item last">
+        </div>
+        <div id="logout">
         </div>
     </div>
 </div>';
