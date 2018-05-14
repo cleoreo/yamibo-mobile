@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
@@ -54,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Allow access to url
         webSettings.setAllowUniversalAccessFromFileURLs(true);
+
+        // Allow mixed content if API level >=21
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
+        }
 
         // if external link is detected, ask to open by external browser
         mWebView.setWebViewClient(new WebViewClient() {
