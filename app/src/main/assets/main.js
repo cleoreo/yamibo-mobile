@@ -555,13 +555,13 @@ function sideMenuHtml () {
         </div>
         <div class="menu-item ftsize-div">
             <label><span>小 </span>
-                <input type="radio" name="ftsize" value="S">
+                <input type="radio" name="ftsize" value="S" id="ftsize-S">
             </label>
             <label><span>中 </span>
-                <input type="radio" name="ftsize" value="M" checked>
+                <input type="radio" name="ftsize" value="M" id="ftsize-M" checked>
             </label>
             <label><span>大 </span>
-                <input type="radio" name="ftsize" value="L">
+                <input type="radio" name="ftsize" value="L" id="ftsize-L">
             </label>
         </div>
         <hr>
@@ -570,13 +570,13 @@ function sideMenuHtml () {
         </div>
         <div class="menu-item language-div">
             <label><span>繁 </span>
-                <input type="radio" name="language" value="tc">
+                <input type="radio" name="language" value="tc" id="language-tc">
             </label>
             <label><span>簡 </span>
-                <input type="radio" name="language" value="sc">
+                <input type="radio" name="language" value="sc" id="language-sc">
             </label>
             <label><span>無 </span>
-                <input type="radio" name="language" value="none" checked>
+                <input type="radio" name="language" value="none" id="language-none">
             </label>
         </div>
     </div>
@@ -596,7 +596,15 @@ function checkAndUpdateSetting() {
         jQuery('body').css('font-size', '10pt');
     }
 
+    if (window.localStorage.getItem("ftsize")) {
+        jQuery('#ftsize-'+ window.localStorage.getItem("ftsize")).prop('checked', true);
+    }
+
     /* checking for language */
+    if (window.localStorage.getItem("language")) {
+        jQuery('#language-'+ window.localStorage.getItem("language")).prop('checked', true);
+    }
+
     if (window.localStorage.getItem("language") == "sc") {
         jQuery('body').t2s();
     }else if (window.localStorage.getItem("language") == "tc") {
