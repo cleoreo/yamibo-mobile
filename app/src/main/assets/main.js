@@ -47,7 +47,7 @@ function runAfterLoad () {
             jQuery('body').append('<div id=\'history-button\'><a title=\'回上頁\' class=\'prev-page\' onclick=\'window.history.back();\'><</a><a title=\'下一頁\' class=\'next-page\' onclick=\'window.history.forward();\'>></a></div>');
 
             /* add menu button */
-            jQuery('.hd').append('<button id="menu-btn"><div></div><div></div><div></div></button>');
+            jQuery('.hd').append('<button id="menu-btn" type="button"><div></div><div></div><div></div></button>');
             jQuery('#menu-btn').click(function(){
                 jQuery('body').toggleClass('menu-opened');
                 window.scrollTo(0,0);
@@ -303,6 +303,7 @@ function customCSS () {
         border: none;
         padding: 0 5px;
         float: right;
+        outline: none;
     }
     #menu-btn div {
         width: 25px;
@@ -328,7 +329,8 @@ function customCSS () {
         opacity: 1;
     }
     .menu-opened {
-        overflow: hidden;
+        position: fixed;
+        top: 0;
     }
     .menu-opened #side-menu {
         left: 0;
