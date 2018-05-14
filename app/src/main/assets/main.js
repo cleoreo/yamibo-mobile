@@ -576,7 +576,7 @@ function sideMenuHtml () {
                 <input type="radio" name="language" value="sc" id="language-sc">
             </label>
             <label><span>無 </span>
-                <input type="radio" name="language" value="none" id="language-none">
+                <input type="radio" name="language" value="none" id="language-none" checked>
             </label>
         </div>
     </div>
