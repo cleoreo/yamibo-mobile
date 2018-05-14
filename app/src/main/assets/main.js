@@ -126,6 +126,11 @@ function runAfterLoad () {
 
                 /* check display post time setting */
                 displayPostTimeCheck();
+
+                /* add mobile=1 into go to page field redirect link  */
+                var redirectStr = jQuery('input[name=custompage]').attr('onkeydown').split('&page=');
+                redirectStr = redirectStr[0] + '&mobile=1' + '&page=' + redirectStr[1];
+                jQuery('input[name=custompage]').attr('onkeydown', redirectStr);
             }
 
             /* when inside a post */
@@ -201,7 +206,6 @@ function runAfterLoad () {
 
                 /* Make reply box height auto grow */
                 textAreaAutoGrow();
-
             }
 
             /* when inside the reply page*/
