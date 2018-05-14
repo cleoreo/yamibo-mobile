@@ -57,11 +57,6 @@
             letter = str.charAt(i);
             code = str.charCodeAt(i); 
             
-            // 根据字符的Unicode判断是否为汉字，以提高性能
-            // 参考:
-            // [1] http://www.unicode.org
-            // [2] http://zh.wikipedia.org/wiki/Unicode%E5%AD%97%E7%AC%A6%E5%88%97%E8%A1%A8
-            // [3] http://xylonwang.iteye.com/blog/519552
             isChinese = (code > 0x3400 && code < 0x9FC3) || (code > 0xF900 && code < 0xFA6A);
 
             if (!isChinese) {
@@ -121,17 +116,13 @@
         for (i = 0; i < childNodes.length; i++) {
             var childNode = childNodes.item(i);
 
-            // 若为HTML Element节点
             if (childNode.nodeType === 1) {
-                // 对以下标签不做处理
                 if ("|BR|HR|TEXTAREA|SCRIPT|OBJECT|EMBED|".indexOf("|" + childNode.tagName + "|") !== -1) {
                     continue;
                 }
                 
                 tranAttr(childNode, ['title', 'data-original-title', 'alt', 'placeholder'], toT);
 
-                // input 标签
-                // 对text类型的input输入框不做处理
                 if (childNode.tagName === "INPUT"
                     && childNode.value !== ""
                     && childNode.type !== "text"
@@ -140,9 +131,8 @@
                     childNode.value = tranStr(childNode.value, toT);
                 }
 
-                // 继续递归调用
                 tranElement(childNode, toT);
-            } else if (childNode.nodeType === 3) {  // 若为文本节点
+            } else if (childNode.nodeType === 3) { 
                 childNode.data = tranStr(childNode.data, toT);
             }
         }
@@ -181,10 +171,7 @@
             });
         },
 
-        /**
-         * jQuery Objects繁转简
-         * @this {jQuery Objects} 待转换的jQuery Objects
-         */
+
         t2s: function() {
             return this.each(function() {
                 tranElement(this, false);
