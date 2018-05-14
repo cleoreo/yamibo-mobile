@@ -1,3 +1,14 @@
+/*
+    localStorage Setting List:
+    1. theme                    // set theme        || value: "day", "night"    || default: "day"
+    2. ftsize                   // set font size    || value: "S", "M", "L"     || default: "M"
+    3. language                 // set language     || value: "tc", "sc", "none"|| default: "none" 
+    4. displayPostCreateTime    // show post time   || value: "true", "false")  || default: "true"  
+*/
+
+
+
+
 var imgArr = [];
 var lastHash = window.location.hash;
 
@@ -79,6 +90,16 @@ function runAfterLoad () {
                 }
                 checkAndUpdateSetting();
             });
+            /* display post create time listener */
+            jQuery('#display-post-time').change(function() {
+                if (jQuery(this).is(":checked")) {
+                    window.localStorage.setItem("displayPostCreateTime", "true");
+                } else {
+                    window.localStorage.setItem("displayPostCreateTime", "false");
+                }
+                checkAndUpdateSetting();
+            });
+
             checkAndUpdateSetting();
 
             jQuery('#side-menu').click(function(e){
@@ -102,6 +123,9 @@ function runAfterLoad () {
                     newHtml += '</div>';
                     jQuery(this).html(newHtml);
                 });
+
+                /* check display post time setting */
+                displayPostTimeCheck();
             }
 
             /* when inside a post */
@@ -367,6 +391,8 @@ function customCSS () {
         background-color: #16110f;
         border-right: 1px solid #856559;
         color: #a16c12;
+        overflow: auto;
+        max-height: 100%;
     }
     #side-menu .menu-item {
         padding: 10px;
@@ -381,7 +407,7 @@ function customCSS () {
     #side-menu .menu-item span {
         padding-right: 5px;
     }
-    #side-menu .theme-div label{
+    #side-menu .switcher-div label{
         display: inline-block;
         margin: 0;
     }
@@ -392,6 +418,7 @@ function customCSS () {
         display: inline-block;
         width: 100%;
         text-align: right;
+        font-size: 0.8rem;
     }
     .tl .bm_c .xg1 a{
         float: left;
@@ -403,16 +430,17 @@ function customCSS () {
         min-width: 110px;
         text-align: right;
         display: inline-block;
-        padding-right: 5px;
+        margin-right: 5px;
     }
     .no-of-reply {
-        min-width: 55px;
         display: inline-block;
+        float: right;
+        min-width: 4rem;
     }
     .no-of-reply:before {
         content: "回";
         position: absolute;
-        right: 45px;
+        right: 3rem;
     }
 
     .postmessage img, .box_ex2 img{
@@ -548,9 +576,9 @@ function sideMenuHtml () {
     return '<div id="side-menu">
     <div>
         <div class="menu-item">
-            <h4>閱讀設定：</h4>
+            <span><b>閱讀設定：</b></span>
         </div>
-        <div class="menu-item theme-div">
+        <div class="menu-item switcher-div">
             <div class="checkbox switcher">
                 <label for="theme">
                     <span>夜間模式： </span>
@@ -560,7 +588,7 @@ function sideMenuHtml () {
             </div>
         </div>
         <div class="menu-item">
-            <p>字體大小：</p>
+            <span>字體大小：</span>
         </div>
         <div class="menu-item ftsize-div">
             <label><span>小 </span>
@@ -575,7 +603,7 @@ function sideMenuHtml () {
         </div>
         <hr>
         <div class="menu-item">
-            <h4>語言設定：</h4>
+            <span><b>語言設定：</b></span>
         </div>
         <div class="menu-item language-div">
             <label><span>繁 </span>
@@ -588,6 +616,19 @@ function sideMenuHtml () {
                 <input type="radio" name="language" value="none" id="language-none" checked>
             </label>
         </div>
+        <hr>
+        <div class="menu-item">
+            <span><b>高級設定：</b></span>
+        </div>
+        <div class="menu-item switcher-div">
+            <div class="checkbox switcher">
+                <label for="display-post-time">
+                    <span>顯示發帖時間： </span>
+                    <input type="checkbox" id="display-post-time" name="post-time">
+                    <span><small></small></span>
+                </label>
+            </div>
+        </div>
     </div>
 </div>';
 }
@@ -598,11 +639,14 @@ function checkAndUpdateSetting() {
     /* checking for font size */
     if (window.localStorage.getItem("ftsize") == "S") {
         jQuery('body').css('font-size', '8pt');
+        jQuery('html').css('font-size', '8pt');
     }else if (window.localStorage.getItem("ftsize") == "L") {
         jQuery('body').css('font-size', '12pt');
+        jQuery('html').css('font-size', '12pt');
     }else{
         window.localStorage.setItem("ftsize", "M");
         jQuery('body').css('font-size', '10pt');
+        jQuery('html').css('font-size', '10pt');
     }
 
     if (window.localStorage.getItem("ftsize")) {
@@ -621,6 +665,9 @@ function checkAndUpdateSetting() {
     }else{
         window.localStorage.setItem("language", "none");
     }
+
+    /* checking for display post create time */
+    displayPostTimeCheck();
 }
 
 function themeCheck () {
@@ -635,6 +682,15 @@ function themeCheck () {
     }
 }
 
+function displayPostTimeCheck () {
+    if (window.localStorage.getItem("displayPostCreateTime") == "false") {
+        jQuery('.post-info .time').hide();
+    }else {
+        window.localStorage.setItem("displayPostCreateTime", "true");
+        jQuery('.post-info .time').show();
+        jQuery('#display-post-time').prop('checked', true);
+    }
+}
 function openGallery (index, items) {
     var pswpElement = jQuery('#pswp')[0];
 
