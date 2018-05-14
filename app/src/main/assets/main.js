@@ -61,6 +61,7 @@ function runAfterLoad () {
             }
             jQuery('#menu-btn').click(function(){
                 jQuery('body').toggleClass('menu-opened');
+                jQuery('#side-menu >div').scrollTop(0);
                 window.scrollTo(0,0);
             });
 
