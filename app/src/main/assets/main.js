@@ -23,8 +23,8 @@ function runAfterLoad () {
     if (/\bmobile=1\b/.test(window.location.search)) {
         /* Add CSS on page load */
         jQuery('body').css('min-width', '100vw');
-        jQuery('body').addClass('day-theme');
 
+        themeCheck();
 
         jQuery('head').append(customCSS());
 
@@ -191,6 +191,16 @@ function runAfterLoad () {
                 /* Make reply box height auto grow */
                 textAreaAutoGrow();
             }
+        });
+    }
+
+    /* if it is in mobile search page */
+    if (/\bmobile=2\b/.test(window.location.search) && /\bsearch.php\b/.test(window.location.href)) {
+
+        /* replace search result links to open in mobile 1 view */
+        jQuery('.threadlist a').each(function () {
+            var newhref = jQuery(this).attr('href').replace('mobile=2', 'mobile=1');
+            jQuery(this).attr('href', newhref);
         });
     }
 }
@@ -572,16 +582,7 @@ function sideMenuHtml () {
 
 function checkAndUpdateSetting() {
     /* checking for theme */
-    if (window.localStorage.getItem("theme") == "night") {
-        jQuery('body').addClass('night-theme');
-        jQuery('body').removeClass('day-theme');
-        jQuery('#theme').prop('checked', true);
-    }else {
-        window.localStorage.setItem("theme", "day");
-        jQuery('body').addClass('day-theme');
-        jQuery('body').removeClass('night-theme');
-    }
-
+    themeCheck();
     /* checking for font size */
     if (window.localStorage.getItem("ftsize") == "S") {
         jQuery('body').css('font-size', '8pt');
@@ -599,6 +600,18 @@ function checkAndUpdateSetting() {
         jQuery('body').s2t();
     }else{
         window.localStorage.setItem("language", "none");
+    }
+}
+
+function themeCheck () {
+    if (window.localStorage.getItem("theme") == "night") {
+        jQuery('body').addClass('night-theme');
+        jQuery('body').removeClass('day-theme');
+        jQuery('#theme').prop('checked', true);
+    }else {
+        window.localStorage.setItem("theme", "day");
+        jQuery('body').addClass('day-theme');
+        jQuery('body').removeClass('night-theme');
     }
 }
 
