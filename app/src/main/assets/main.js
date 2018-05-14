@@ -23,8 +23,10 @@ function runAfterLoad () {
     jQuery('head').append('<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">');
 
     /* for debuging */
-    jQuery('body').prepend('<div class="debug-tool"><button class="copy-link" data-clipboard-text="">複製本頁鏈接</button></div>');
-    jQuery('.debug-tool button').attr('data-clipboard-text', window.location.href);
+    if (jQuery('.debug-tool').length == 0) {
+        jQuery('body').prepend('<div class="debug-tool"><button class="copy-link" data-clipboard-text="">複製本頁鏈接</button></div>');
+        jQuery('.debug-tool button').attr('data-clipboard-text', window.location.href);    
+    }
     var clipboard = new ClipboardJS('.copy-link');
     clipboard.on('success', function(e) {
         window.alert('你已複製鏈接');
@@ -148,10 +150,21 @@ function runAfterLoad () {
                 var allImageEl = jQuery('.postmessage img:not([smilieid]), .box.box_ex2 img');
                 allImageEl.each(function (i) {
                     var imgSrc = jQuery(this).attr('src');
+                    /* force image load from https */
+                    if (! /\bhttps:\b/.test(imgSrc)) {
+                        imgSrc = imgSrc.replace('http://', 'https://');
+                    }
+                    jQuery(this).attr('src', imgSrc);
+
                     if (jQuery(this).parent().is('a')) {
                         var largeImage = jQuery(this).parent().attr('href');
                         jQuery(this).unwrap();
                         imgSrc = largeImage;
+
+                        /* force large image load from https */
+                        if (! /\bhttps\b/.test(imgSrc)) {
+                            imgSrc = imgSrc.replace('http://', 'https://');
+                        }
                     }
 
                     jQuery(this).addClass('gallery-image');
