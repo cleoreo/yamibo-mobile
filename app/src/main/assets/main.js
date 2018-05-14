@@ -58,14 +58,18 @@ function runAfterLoad () {
             jQuery('body').append('<div id=\'history-button\'><a title=\'回上頁\' class=\'prev-page\' onclick=\'window.history.back();\'><</a><a title=\'下一頁\' class=\'next-page\' onclick=\'window.history.forward();\'>></a></div>');
 
             /* add menu button */
-            jQuery('.hd').append('<button id="menu-btn" type="button"><div></div><div></div><div></div></button>');
+            if (jQuery('#menu-btn').length == 0) {
+                jQuery('.hd').append('<button id="menu-btn" type="button"><div></div><div></div><div></div></button>');
+            }
             jQuery('#menu-btn').click(function(){
                 jQuery('body').toggleClass('menu-opened');
                 window.scrollTo(0,0);
             });
 
             /* add side menu */
-            jQuery('body').append(sideMenuHtml());
+            if (jQuery('#side-menu').length == 0) {
+                jQuery('body').append(sideMenuHtml());
+            }
 
             /* add side menu listener */
             /* theme listener*/
@@ -695,6 +699,7 @@ function displayPostTimeCheck () {
         jQuery('#display-post-time').prop('checked', true);
     }
 }
+
 function openGallery (index, items) {
     var pswpElement = jQuery('#pswp')[0];
 
