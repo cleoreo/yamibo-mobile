@@ -132,7 +132,7 @@
                 }
 
                 tranElement(childNode, toT);
-            } else if (childNode.nodeType === 3) { 
+            } else if (childNode.nodeType === 3) {
                 childNode.data = tranStr(childNode.data, toT);
             }
         }
