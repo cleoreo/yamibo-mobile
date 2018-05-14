@@ -329,6 +329,7 @@ function customCSS () {
         opacity: 1;
     }
     .menu-opened {
+        height: 100%;
         position: fixed;
         top: 0;
     }
