@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.DownloadListener;
+import android.webkit.JsResult;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -160,7 +161,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // purpose: Show alert in web view
-        mWebView.setWebChromeClient(new WebChromeClient());
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+                result.confirm();
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });
 
         // download file handler
         mWebView.setDownloadListener(

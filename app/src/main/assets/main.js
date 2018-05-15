@@ -71,13 +71,13 @@ function runAfterLoad () {
             }
 
             /* move logout link to side menu */
-            jQuery('#logout').html(jQuery('.wp .pd2 a').last()[0].outerHTML);
-            if (jQuery('.wp .pd2 a').length > 1) {
-                jQuery('.wp .pd2 a:last').remove();
+            jQuery('#logout').html(jQuery('.wp >.pd2 a').last()[0].outerHTML);
+            if (jQuery('.wp >.pd2 a').length > 1) {
+                jQuery('.wp >.pd2 a:last').remove();
             }
             /* Add search link on top */
             if (jQuery('#search-link').length == 0) {
-                jQuery('.wp .pd2').append('<a href="https://bbs.yamibo.com/search.php?mod=forum&mobile=2" id="search-link">搜索</a>');
+                jQuery('.wp >.pd2').append('<a href="https://bbs.yamibo.com/search.php?mod=forum&mobile=2" id="search-link">搜索</a>');
             }
 
             /* add side menu listener */
@@ -259,7 +259,7 @@ function runAfterLoad () {
 
 function customCSS () {
     var standardCustomCss = '<style>' +
-    'body.day-theme {
+    `body.day-theme {
         background-color: #FFF5D7;
     }
     .day-theme #menu-btn div {
@@ -581,12 +581,12 @@ function customCSS () {
     div.checkbox.switcher label input:checked + span small, div.radio.switcher label input:checked + span small {
       left: 50%;
     }
-    </style>';
+    </style>`;
     return standardCustomCss.replace(' ', '').replace('\n', '');
 }
 
 function photoSwipeHtml () {
-    return '<div id="pswp" class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    return `<div id="pswp" class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="pswp__bg"></div>
     <div class="pswp__scroll-wrap">
     <div class="pswp__container">
@@ -621,11 +621,11 @@ function photoSwipeHtml () {
     </div>
     </div>
     </div>
-    </div>';
+    </div>`;
 }
 
 function sideMenuHtml () {
-    return '<div id="side-menu">
+    return `<div id="side-menu">
     <div>
         <div class="menu-item">
             <span><b>閱讀設定：</b></span>
@@ -686,7 +686,7 @@ function sideMenuHtml () {
         <div id="logout">
         </div>
     </div>
-</div>';
+</div>`;
 }
 
 function checkAndUpdateSetting() {
