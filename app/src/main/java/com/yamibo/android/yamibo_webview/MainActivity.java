@@ -3,6 +3,8 @@ package com.yamibo.android.yamibo_webview;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DownloadManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,6 +20,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.DownloadListener;
+import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -163,9 +166,23 @@ public class MainActivity extends AppCompatActivity {
         // purpose: Show alert in web view
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
+            // override js window.alert and show message in a android toast
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
                 result.confirm();
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
+            @Override
+            // override js window.prompt and copy text in prompt text box to clipboard
+            public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, final JsPromptResult result) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Batch Reply Markdown Code", defaultValue);
+                clipboard.setPrimaryClip(clip);
+                result.confirm();
+
+                Toast.makeText(getApplicationContext(), "已複製", Toast.LENGTH_SHORT).show();
+
                 return true;
             }
         });
