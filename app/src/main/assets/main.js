@@ -1,9 +1,10 @@
 /*
     localStorage Setting List:
-    1. theme                    // set theme        || value: "day", "night"    || default: "day"
-    2. ftsize                   // set font size    || value: "S", "M", "L"     || default: "M"
-    3. language                 // set language     || value: "tc", "sc", "none"|| default: "none" 
-    4. displayPostCreateTime    // show post time   || value: "true", "false")  || default: "true"  
+    1. theme                    // set theme                || value: "day", "night"    || default: "day"
+    2. ftsize                   // set font size            || value: "S", "M", "L"     || default: "M"
+    3. language                 // set language             || value: "tc", "sc", "none"|| default: "none"
+    4. displayPostCreateTime    // show post time           || value: "true", "false"   || default: "true"
+    5. loadBigImageAtFirst      // show big image first     || value: "true", "false"   || default: "false"
 */
 
 
@@ -25,7 +26,7 @@ function runAfterLoad () {
     /* for debuging */
     if (jQuery('.debug-tool').length == 0) {
         jQuery('body').prepend('<div class="debug-tool"><button class="copy-link" data-clipboard-text="">複製本頁鏈接</button></div>');
-        jQuery('.debug-tool button').attr('data-clipboard-text', window.location.href);    
+        jQuery('.debug-tool button').attr('data-clipboard-text', window.location.href);
     }
     var clipboard = new ClipboardJS('.copy-link');
     clipboard.on('success', function(e) {
@@ -113,6 +114,16 @@ function runAfterLoad () {
                 checkAndUpdateSetting();
             });
 
+            /* load big image setting listener */
+            jQuery('#load-big-image').change(function() {
+                if (jQuery(this).is(":checked")) {
+                    window.localStorage.setItem("loadBigImageAtFirst", "true");
+                    window.alert('直接上大圖了，小心流量哦！');
+                } else {
+                    window.localStorage.setItem("loadBigImageAtFirst", "false");
+                }
+            });
+
             checkAndUpdateSetting();
 
             jQuery('#side-menu').click(function(e){
@@ -171,6 +182,11 @@ function runAfterLoad () {
                         /* force large image load from https */
                         if (! /\bhttps\b/.test(imgSrc)) {
                             imgSrc = imgSrc.replace('http://', 'https://');
+                        }
+
+                        /* image load big one first setting check */
+                        if (window.localStorage.getItem("loadBigImageAtFirst") == "true") {
+                            jQuery(this).attr('src', imgSrc);
                         }
                     }
 
@@ -671,7 +687,20 @@ function sideMenuHtml () {
         </div>
         <hr>
         <div class="menu-item">
-            <span><b>高級設定：</b></span>
+            <span><b>流量設定：</b></span>
+        </div>
+        <div class="menu-item switcher-div">
+            <div class="checkbox switcher">
+                <label for="load-big-image">
+                    <span>直接顯示大圖： </span>
+                    <input type="checkbox" id="load-big-image" name="load-big-image">
+                    <span><small></small></span>
+                </label>
+            </div>
+        </div>
+        <hr>
+        <div class="menu-item">
+            <span><b>其他設定：</b></span>
         </div>
         <div class="menu-item switcher-div">
             <div class="checkbox switcher">
@@ -725,6 +754,13 @@ function checkAndUpdateSetting() {
 
     /* checking for display post create time */
     displayPostTimeCheck();
+
+    /* checking for image show big one first */
+    if (window.localStorage.getItem("loadBigImageAtFirst") == "true") {
+        jQuery('#load-big-image').prop('checked', true);
+    }else {
+        window.localStorage.setItem("loadBigImageAtFirst", "false");
+    }
 }
 
 function themeCheck () {
