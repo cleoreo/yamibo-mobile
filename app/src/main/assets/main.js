@@ -2,7 +2,7 @@
     localStorage Setting List:
     1. theme                    // set theme                || value: "day", "night"    || default: "day"
     2. ftsize                   // set font size            || value: "S", "M", "L"     || default: "M"
-    3. language                 // set language             || value: "tc", "sc", "none"|| default: "none"
+    3. language                 // set language             || value: "tc", "sc", "none"|| default: "none" 
     4. displayPostCreateTime    // show post time           || value: "true", "false"   || default: "true"
     5. loadBigImageAtFirst      // show big image first     || value: "true", "false"   || default: "false"
 */
@@ -26,7 +26,7 @@ function runAfterLoad () {
     /* for debuging */
     if (jQuery('.debug-tool').length == 0) {
         jQuery('body').prepend('<div class="debug-tool"><button class="copy-link" data-clipboard-text="">複製本頁鏈接</button></div>');
-        jQuery('.debug-tool button').attr('data-clipboard-text', window.location.href);
+        jQuery('.debug-tool button').attr('data-clipboard-text', window.location.href);    
     }
     var clipboard = new ClipboardJS('.copy-link');
     clipboard.on('success', function(e) {
@@ -119,6 +119,9 @@ function runAfterLoad () {
                 if (jQuery(this).is(":checked")) {
                     window.localStorage.setItem("loadBigImageAtFirst", "true");
                     window.alert('直接上大圖了，小心流量哦！');
+                    if ( (/\b&tid=\b/.test(window.location.search) || /\bthread\b/.test(window.location.href)) && ! /\baction=\b/.test(window.location.search) ) {
+                        window.location.reload();
+                    }
                 } else {
                     window.localStorage.setItem("loadBigImageAtFirst", "false");
                 }
@@ -183,11 +186,11 @@ function runAfterLoad () {
                         if (! /\bhttps\b/.test(imgSrc)) {
                             imgSrc = imgSrc.replace('http://', 'https://');
                         }
-
-                        /* image load big one first setting check */
-                        if (window.localStorage.getItem("loadBigImageAtFirst") == "true") {
-                            jQuery(this).attr('src', imgSrc);
-                        }
+                    }
+                    /* image load big one first setting check */
+                    if (window.localStorage.getItem("loadBigImageAtFirst") == "true") {
+                        jQuery(this).attr('src', imgSrc);
+                        jQuery(this).addClass('big-image');
                     }
 
                     jQuery(this).addClass('gallery-image');
@@ -197,9 +200,11 @@ function runAfterLoad () {
                     imgArr.push(imgObj);
                 });
 
+                /* if image Array is ready */
                 var imgArrReady = setInterval(function () {
                     if (imgArr.length == allImageEl.length) {
 
+                        /* add listener to image for opening gallery */
                         jQuery('.gallery-image').click(function () {
                             var index = parseInt(jQuery(this).attr('gallery-index'));
                             openGallery(index, imgArr);
@@ -348,7 +353,7 @@ function customCSS () {
         background-color: #2b201d;
     }
     .night-theme .even {
-        background-color: #291a0a;
+        background-color: transparent;
     }
     .night-theme .bm .bm_c {
         border-color: #7e5f54 !important;
@@ -368,7 +373,7 @@ function customCSS () {
     }
     .night-theme #scroll-button a, .night-theme #history-button a {
         background-color: rgba(43, 32, 29, 0.8) !important;
-        border: 1px solid #DBC38C;
+        border: 1px solid #806155;
         color: #a19212;
     }
     .night-theme select {
@@ -512,6 +517,11 @@ function customCSS () {
 
     .postmessage img, .box_ex2 img{
         max-width: 100%;
+    }
+    .big-image {
+        width: 100%;
+        width: 100vw;
+        height: auto;
     }
 
     #scroll-button {
