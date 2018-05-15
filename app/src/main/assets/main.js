@@ -122,7 +122,7 @@ function runAfterLoad () {
             });
 
             /* when inside a forum page */
-            if (/\b&fid=\b/.test(window.location.search)) {
+            if (/\b&fid=\b/.test(window.location.search) && ! /\b&action=\b/.test(window.location.search)) {
                 /* format post date and time */
                 jQuery('.tl .bm_c .xg1').each(function () {
                     var dateText = jQuery.trim(jQuery(this).clone().children().remove().end().text());
@@ -147,7 +147,7 @@ function runAfterLoad () {
             }
 
             /* when inside a post */
-            if ( (/\b&tid=\b/.test(window.location.search) || /\bthread\b/.test(window.location.href)) && ! /\baction=reply\b/.test(window.location.search) ) {
+            if ( (/\b&tid=\b/.test(window.location.search) || /\bthread\b/.test(window.location.href)) && ! /\baction=\b/.test(window.location.search) ) {
                 /* handle keyboard cover comment box */
                 jQuery('body').addClass('is-post');
 
@@ -232,8 +232,8 @@ function runAfterLoad () {
                 textAreaAutoGrow();
             }
 
-            /* when inside the reply page*/
-            if (/\baction=reply\b/.test(window.location.search)) {
+            /* when inside the reply page || edit reply page */
+            if (/\baction=reply\b/.test(window.location.search) || /\baction=edit\b/.test(window.location.search) ) {
 
                 /* change post form url to mobile=1 */
                 var replyurl = jQuery('#postform').attr('action');
@@ -259,7 +259,7 @@ function runAfterLoad () {
 
 function customCSS () {
     var standardCustomCss = '<style>' +
-    `body.day-theme {
+    'body.day-theme {
         background-color: #FFF5D7;
     }
     .day-theme #menu-btn div {
@@ -540,8 +540,9 @@ function customCSS () {
         width: calc(100% - 12px) !important;
     }
 
-    input[type="submit"] {
+    input[type="submit"], input[type="file"] {
         width: 100% !important;
+        max-width: 100% !important;
     }
 
     div.checkbox.switcher label, div.radio.switcher label {
@@ -581,12 +582,12 @@ function customCSS () {
     div.checkbox.switcher label input:checked + span small, div.radio.switcher label input:checked + span small {
       left: 50%;
     }
-    </style>`;
+    </style>';
     return standardCustomCss.replace(' ', '').replace('\n', '');
 }
 
 function photoSwipeHtml () {
-    return `<div id="pswp" class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    return '<div id="pswp" class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="pswp__bg"></div>
     <div class="pswp__scroll-wrap">
     <div class="pswp__container">
@@ -621,11 +622,11 @@ function photoSwipeHtml () {
     </div>
     </div>
     </div>
-    </div>`;
+    </div>';
 }
 
 function sideMenuHtml () {
-    return `<div id="side-menu">
+    return '<div id="side-menu">
     <div>
         <div class="menu-item">
             <span><b>閱讀設定：</b></span>
@@ -686,7 +687,7 @@ function sideMenuHtml () {
         <div id="logout">
         </div>
     </div>
-</div>`;
+</div>';
 }
 
 function checkAndUpdateSetting() {
@@ -793,7 +794,10 @@ function openGallery (index, items) {
 
 function textAreaAutoGrow () {
     var textarea = jQuery('textarea')[0];
-    var heightLimit = 800;
+    var heightLimit = 500;
+
+    textarea.style.height = "";
+    textarea.style.height = Math.min(textarea.scrollHeight, heightLimit) + "px";
 
     textarea.oninput = function() {
         textarea.style.height = "";
