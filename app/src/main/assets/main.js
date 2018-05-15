@@ -23,16 +23,6 @@ function runAfterLoad () {
     jQuery('head').append('<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css"/>');
     jQuery('head').append('<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">');
 
-    /* for debuging */
-    if (jQuery('.debug-tool').length == 0) {
-        jQuery('body').prepend('<div class="debug-tool"><button class="copy-link" data-clipboard-text="">複製本頁鏈接</button></div>');
-        jQuery('.debug-tool button').attr('data-clipboard-text', window.location.href);    
-    }
-    var clipboard = new ClipboardJS('.copy-link');
-    clipboard.on('success', function(e) {
-        window.alert('你已複製鏈接');
-    });
-
     /* if it is in mobile standard mode (mobile=1) */
     if (/\bmobile=1\b/.test(window.location.search)) {
         /* Add CSS on page load */
@@ -281,6 +271,14 @@ function runAfterLoad () {
             jQuery(this).attr('href', newhref);
         });
     }
+
+    /* for debuging */
+    if (jQuery('.debug-tool').length == 0) {
+        jQuery('body').append('<div class="debug-tool"><button class="copy-link">複製本頁鏈接</button></div>');
+    }
+    jQuery('.copy-link').click(function() {
+        window.prompt('你已複製鏈接', window.location.href);
+    });
 }
 
 function customCSS () {

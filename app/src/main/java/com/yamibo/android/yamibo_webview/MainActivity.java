@@ -113,13 +113,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                view.evaluateJavascript(readFromFile("clipboard.min.js"), new ValueCallback<String>() {
-                    @Override
-                    public void onReceiveValue(String value) {
-                        Log.d("", "value = " + value);
-                    }
-                });
-
                 view.evaluateJavascript(readFromFile("photoswipe.min.js"), new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String value) {
@@ -151,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
                 mSwipeRefreshLayout.setRefreshing(false);
                 view.setVisibility(View.VISIBLE);
+
                 // load image after javascript is injected
                 view.getSettings().setLoadsImagesAutomatically(true);
             }
