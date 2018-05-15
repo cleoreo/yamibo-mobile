@@ -66,6 +66,11 @@ function runAfterLoad () {
                 window.scrollTo(0,0);
             });
 
+            /* move prev page link before next link */
+            jQuery('.wp .pg .prev').each(function() {
+                jQuery(this).parent().find('.nxt').before(jQuery(this));
+            });
+
             /* add side menu */
             if (jQuery('#side-menu').length == 0) {
                 jQuery('body').append(sideMenuHtml());
@@ -548,6 +553,9 @@ function customCSS () {
         line-height: 100%;
         padding: 7px 10px;
     }
+    .ft {
+        margin-bottom: 100px;
+    }
     .is-post .ft {
         margin-bottom: 300px;
         margin-bottom: 40vh;
@@ -559,6 +567,25 @@ function customCSS () {
         background-color: #551200;
         color: #ffffff;
         padding: 10px;
+    }
+
+    .wp .pg {
+        display: inline-block;
+        width: 100%;
+    }
+    .wp .pg >label >span {
+        display: none;
+    }
+    .wp .pg a {
+        display: inline-block;
+    }
+    .wp .pg .prev, .wp .pg .nxt {
+        margin: 5px 0;
+        padding: 5px 15px;
+        border: 1px solid;
+    }
+    .wp .pg .nxt {
+        float: right;
     }
 
     input[type="text"], input[type="submit"], textarea {

@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
                             request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, url.substring(url.lastIndexOf('/') + 1, url.length()));
                             DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                             dm.enqueue(request);
-                            Toast.makeText(getApplicationContext(), "Downloading File", //To notify the Client that the file is being downloaded
+                            Toast.makeText(getApplicationContext(), "下載中", //To notify the Client that the file is being downloaded
                                     Toast.LENGTH_LONG).show();
                         }
                     }
