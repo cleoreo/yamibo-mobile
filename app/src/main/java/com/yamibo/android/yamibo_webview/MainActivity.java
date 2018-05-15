@@ -134,13 +134,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                view.evaluateJavascript(readFromFile("jquery.s2t.js"), new ValueCallback<String>() {
-                    @Override
-                    public void onReceiveValue(String value) {
-                        Log.d("", "value = " + value);
-                    }
-                });
-
                 view.evaluateJavascript(readFromFile("desktop.js"), new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String value) {
