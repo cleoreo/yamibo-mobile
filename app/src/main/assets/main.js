@@ -11,11 +11,13 @@
 
 
 var imgArr = [];
-var lastHash = window.location.hash;
 
 runAfterLoad();
 
 function runAfterLoad () {
+    jQuery('html').find('script').filter(function () {
+        return jQuery(this).attr('src') == 'https://bbs.yamibo.com/source/plugin/oyeeh_geo/template/js/geo.js';
+    }).remove();
     jQuery('head').append('<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css"/>');
     jQuery('head').append('<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css"/>');
     jQuery('head').append('<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">');
@@ -205,15 +207,6 @@ function runAfterLoad () {
                         clearInterval(imgArrReady);
                     }
                 }, 100);
-
-                /* For Android back button close image previewer*/
-                jQuery(window).bind('hashchange', function () {
-                    var newHash = window.location.hash;
-                    if (lastHash == '#previeweropened') {
-                        jQuery('.pswp__button--close').click();
-                    }
-                    lastHash = newHash;
-                });
 
                 /* Force all link to redirect instead of open in new tab */
                 jQuery('.postmessage a').removeAttr('target');
@@ -849,12 +842,8 @@ function openGallery (index, items) {
             img.src = item.src;
         }
     });
-    window.location.hash = 'previeweropened';
 
     gallery.listen('close', function () {
-        if (window.location.hash == '#previeweropened') {
-            window.history.back();
-        }
         jQuery('#pswp').remove();
         jQuery('body').append(photoSwipeHtml());
     });
