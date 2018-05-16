@@ -66,10 +66,12 @@ public class MainActivity extends AppCompatActivity {
             webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
         }
 
+        // disable zoom
+        webSettings.setBuiltInZoomControls(false);
+        webSettings.setDisplayZoomControls(false);
+
         // if external link is detected, ask to open by external browser
         mWebView.setWebViewClient(new WebViewClient() {
-            String mobile1 = "&mobile1=";
-            String mobile2 = "&mobile2=";
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -81,17 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // handle external image url download
                 if (url.endsWith(".jpg") || url.endsWith(".png")) {
-                    if (checkReadAndWriteExternalStoragePermission((Context) MainActivity.this)) {
-                        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-
-                        request.allowScanningByMediaScanner();
-                        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED); //Notify client once download is completed!
-                        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, url.substring(url.lastIndexOf('/') + 1, url.length()));
-                        DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-                        dm.enqueue(request);
-                        Toast.makeText(getApplicationContext(), "下載中", //To notify the Client that the file is being downloaded
-                                Toast.LENGTH_LONG).show();
-                    }
+                    downloadImage(url);
                     return true;
                 }
 
@@ -107,15 +99,6 @@ public class MainActivity extends AppCompatActivity {
                 // disable Image Auto load for every page
                 view.getSettings().setLoadsImagesAutomatically(false);
 
-                // disable zoom
-                view.getSettings().setBuiltInZoomControls(true);
-                view.getSettings().setDisplayZoomControls(false);
-
-                // if it is a desktop page
-                if (!url.toLowerCase().contains(mobile1.toLowerCase()) && !url.toLowerCase().contains(mobile2.toLowerCase())) {
-                    view.getSettings().setBuiltInZoomControls(false);
-                    view.getSettings().setDisplayZoomControls(true);
-                }
             }
 
             @Override
@@ -196,17 +179,7 @@ public class MainActivity extends AppCompatActivity {
                 new DownloadListener() {
                     @Override
                     public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
-                        if (checkReadAndWriteExternalStoragePermission((Context) MainActivity.this)) {
-                            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-
-                            request.allowScanningByMediaScanner();
-                            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED); //Notify client once download is completed!
-                            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, url.substring(url.lastIndexOf('/') + 1, url.length()));
-                            DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-                            dm.enqueue(request);
-                            Toast.makeText(getApplicationContext(), "下載中", //To notify the Client that the file is being downloaded
-                                    Toast.LENGTH_LONG).show();
-                        }
+                        downloadImage(url);
                     }
                 }
         );
@@ -280,6 +253,23 @@ public class MainActivity extends AppCompatActivity {
             return false;
         } else {
             return true;
+        }
+    }
+
+    private void downloadImage(String url) {
+        DownloadManagerResolver.resolve(MainActivity.this);
+
+        if (checkReadAndWriteExternalStoragePermission((Context) MainActivity.this)) {
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+
+            request.allowScanningByMediaScanner();
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED); //Notify client once download is completed!
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, url.substring(url.lastIndexOf('/') + 1, url.length()));
+            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
+            DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+            dm.enqueue(request);
+            Toast.makeText(getApplicationContext(), "下載中", //To notify the Client that the file is being downloaded
+                    Toast.LENGTH_LONG).show();
         }
     }
 }
