@@ -30,6 +30,7 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -76,6 +77,22 @@ public class MainActivity extends AppCompatActivity {
                     view.setVisibility(View.INVISIBLE);
 
                     return false;
+                }
+
+                // handle external image url download
+                if (url.endsWith(".jpg") || url.endsWith(".png")) {
+                    if (checkReadAndWriteExternalStoragePermission((Context) MainActivity.this)) {
+                        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+
+                        request.allowScanningByMediaScanner();
+                        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED); //Notify client once download is completed!
+                        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, url.substring(url.lastIndexOf('/') + 1, url.length()));
+                        DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                        dm.enqueue(request);
+                        Toast.makeText(getApplicationContext(), "下載中", //To notify the Client that the file is being downloaded
+                                Toast.LENGTH_LONG).show();
+                    }
+                    return true;
                 }
 
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
