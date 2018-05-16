@@ -229,6 +229,11 @@ function runAfterLoad () {
                     }
                 });
 
+                /* change poll form submit link to mobile =1 */
+                var pollFormUrl = jQuery('#poll').attr('action');
+                pollFormUrl = pollFormUrl.replace('mobile=yes', 'mobile=1');
+                jQuery('#poll').attr('action', pollFormUrl);
+
                 /* change post link of reply form at bottom to mobile=1 */
                 var posturl = jQuery('#fastpostform').attr('action');
                 posturl = posturl.replace('mobile=yes', 'mobile=1');
