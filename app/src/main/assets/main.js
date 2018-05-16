@@ -314,6 +314,10 @@ function customCSS () {
         background-color: rgba(255, 255, 255, 0.8) !important;
         border: 1px solid #DBC38C;
     }
+    .day-theme input[type="submit"] {
+        border: 1px solid #551200;
+        background-color: #FFE;
+    }
 
     body.night-theme {
       background-color: #0b0704 !important;
