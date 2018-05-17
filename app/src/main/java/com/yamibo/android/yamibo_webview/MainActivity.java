@@ -185,21 +185,22 @@ public class MainActivity extends AppCompatActivity {
         );
 
 
-
         // check that link is not null
         // or that you opened app from deep link
         if (getIntent() != null && getIntent().getData() != null) {
             Uri intentUri = getIntent().getData(); //get link
             String verifiedUrl = intentUri.toString().replace("mobile=yes", "mobile=1");
             verifiedUrl = verifiedUrl.replace("mobile=2", "mobile=1");
-            if (! verifiedUrl.toLowerCase().contains("&mobile=")){
-                verifiedUrl = verifiedUrl + "&mobile=1" ;
+
+            if (!verifiedUrl.toLowerCase().contains("?")) {
+                verifiedUrl = verifiedUrl + "?mobile=1";
+            } else if (!verifiedUrl.toLowerCase().contains("&mobile=")) {
+                verifiedUrl = verifiedUrl + "&mobile=1";
             }
             mWebView.loadUrl(verifiedUrl); //open it in webView
-        }else {
+        } else {
             mWebView.loadUrl("https://bbs.yamibo.com/forum.php?mobile=1");
         }
-
 
 
         mSwipeRefreshLayout.setOnRefreshListener(
