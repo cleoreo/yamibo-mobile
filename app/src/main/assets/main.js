@@ -222,7 +222,13 @@ function runAfterLoad () {
                             if (href.split('?').length > 1) {
                                 href = href + '&mobile=1';
                             }else {
-                                href = href + '?mobile=1';
+                                if (href.slice(-1) == "/") {
+                                    href = href + "forum.php?mobile=1";
+                                }else if(href.slice(-4) == ".com"){
+                                    href = href + "/forum.php?mobile=1";
+                                }else{
+                                    href = href + '?mobile=1';
+                                }
                             }
                         }
                         jQuery(this).attr('href', href);

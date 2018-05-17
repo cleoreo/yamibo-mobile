@@ -192,6 +192,12 @@ public class MainActivity extends AppCompatActivity {
             String verifiedUrl = intentUri.toString().replace("mobile=yes", "mobile=1");
             verifiedUrl = verifiedUrl.replace("mobile=2", "mobile=1");
 
+            if (verifiedUrl.equals("https://bbs.yamibo.com/") || verifiedUrl.equals("http://bbs.yamibo.com/")) {
+                verifiedUrl = verifiedUrl + "forum.php?mobile=1";
+            }
+            if (verifiedUrl.equals("https://bbs.yamibo.com") || verifiedUrl.equals("http://bbs.yamibo.com")) {
+                verifiedUrl = verifiedUrl + "/forum.php?mobile=1";
+            }
             if (!verifiedUrl.toLowerCase().contains("?")) {
                 verifiedUrl = verifiedUrl + "?mobile=1";
             } else if (!verifiedUrl.toLowerCase().contains("&mobile=")) {
