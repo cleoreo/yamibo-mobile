@@ -248,8 +248,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private static boolean checkReadAndWriteExternalStoragePermission(Context context) {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             return false;
         } else {
             return true;
@@ -257,8 +257,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void downloadImage(String url) {
-        DownloadManagerResolver.resolve(MainActivity.this);
-
         if (checkReadAndWriteExternalStoragePermission((Context) MainActivity.this)) {
             DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
 
