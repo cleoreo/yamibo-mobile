@@ -236,13 +236,15 @@ function runAfterLoad () {
                 });
 
                 /* change poll form submit link to mobile =1 */
-                var pollFormUrl = jQuery('#poll').attr('action');
-                pollFormUrl = pollFormUrl.replace('mobile=yes', 'mobile=1');
-                jQuery('#poll').attr('action', pollFormUrl);
+                if (jQuery('#poll').length >0) {
+                    var pollFormUrl = jQuery('#poll').attr('action');
+                    pollFormUrl = pollFormUrl.replace(/mobile=yes/g, 'mobile=1');
+                    jQuery('#poll').attr('action', pollFormUrl);
+                }
 
                 /* change post link of reply form at bottom to mobile=1 */
                 var posturl = jQuery('#fastpostform').attr('action');
-                posturl = posturl.replace('mobile=yes', 'mobile=1');
+                posturl = posturl.replace(/mobile=yes/g, 'mobile=1');
                 jQuery('#fastpostform').attr('action', posturl);
 
                 /* Make reply box height auto grow */
@@ -286,7 +288,7 @@ function runAfterLoad () {
 
 function customCSS () {
     var standardCustomCss = '<style>' +
-    `body.day-theme {
+    'body.day-theme {
         background-color: #FFF5D7;
     }
     .day-theme #menu-btn div {
@@ -640,12 +642,12 @@ function customCSS () {
     div.checkbox.switcher label input:checked + span small, div.radio.switcher label input:checked + span small {
       left: 50%;
     }
-    </style>`;
+    </style>';
     return standardCustomCss.replace(' ', '').replace('\n', '');
 }
 
 function photoSwipeHtml () {
-    return `<div id="pswp" class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    return '<div id="pswp" class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="pswp__bg"></div>
     <div class="pswp__scroll-wrap">
     <div class="pswp__container">
@@ -680,11 +682,11 @@ function photoSwipeHtml () {
     </div>
     </div>
     </div>
-    </div>`;
+    </div>';
 }
 
 function sideMenuHtml () {
-    return `<div id="side-menu">
+    return '<div id="side-menu">
     <div>
         <div class="menu-item">
             <span><b>閱讀設定：</b></span>
@@ -758,7 +760,7 @@ function sideMenuHtml () {
         <div id="logout">
         </div>
     </div>
-</div>`;
+</div>';
 }
 
 function checkAndUpdateSetting() {
