@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -76,8 +77,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (Uri.parse(url).getHost().endsWith("bbs.yamibo.com")) {
-                    view.setVisibility(View.INVISIBLE);
-
                     return false;
                 }
 
@@ -99,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 // disable Image Auto load for every page
                 view.getSettings().setLoadsImagesAutomatically(false);
 
+                view.setVisibility(View.INVISIBLE);
             }
 
             @Override
