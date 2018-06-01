@@ -928,8 +928,19 @@ function openGallery (index, items) {
 }
 
 function textAreaAutoGrow () {
+    function vhTOpx(value) {
+        var w = window,
+          d = document,
+          e = d.documentElement,
+          g = d.getElementsByTagName('body')[0],
+          x = w.innerWidth || e.clientWidth || g.clientWidth,
+          y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+
+        var result = (y*value)/100;
+        return result;
+    }
     var textarea = jQuery('textarea')[0];
-    var heightLimit = 500;
+    var heightLimit = vhTOpx(50);
 
     textarea.style.height = "";
     textarea.style.height = Math.min(textarea.scrollHeight, heightLimit) + "px";
