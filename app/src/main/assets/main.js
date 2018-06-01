@@ -1,10 +1,11 @@
 /*
     localStorage Setting List:
-    1. theme                    // set theme                || value: "day", "night"    || default: "day"
-    2. ftsize                   // set font size            || value: "S", "M", "L"     || default: "M"
-    3. language                 // set language             || value: "tc", "sc", "none"|| default: "none" 
-    4. displayPostCreateTime    // show post time           || value: "true", "false"   || default: "true"
-    5. loadBigImageAtFirst      // show big image first     || value: "true", "false"   || default: "false"
+    1. theme                    // set theme                || value: "day", "night"        || default: "day"
+    2. ftsize                   // set font size            || value: "S", "M", "L"         || default: "M"
+    3. language                 // set language             || value: "tc", "sc", "none"    || default: "none"
+    4. displayPostCreateTime    // show post time           || value: "true", "false"       || default: "true"
+    5. loadBigImageAtFirst      // show big image first     || value: "true", "false"       || default: "false"
+    6. copyUrl                  // set url version          || value: "mobile1", "desktop"  || default: "mobile1"
 */
 
 
@@ -57,7 +58,7 @@ function runAfterLoad () {
 
             /* move prev page link before next link */
             jQuery('.wp .pg .prev').each(function() {
-                jQuery(this).parent().find('.nxt').before(jQuery(this));
+                jQuery(this).parent().find('label').after(jQuery(this));
             });
 
             /* add side menu */
@@ -119,6 +120,12 @@ function runAfterLoad () {
                 } else {
                     window.localStorage.setItem("loadBigImageAtFirst", "false");
                 }
+            });
+
+            /* copy link setting listener */
+            jQuery('input[name=copy-link]').change(function() {
+                window.localStorage.setItem("copyUrl", jQuery(this).val());
+                checkAndUpdateSetting();
             });
 
             checkAndUpdateSetting();
@@ -292,6 +299,32 @@ function runAfterLoad () {
                 /* Make reply box height auto grow */
                 textAreaAutoGrow();
             }
+
+            /* when inside pm page */
+            if (/\bmod=space\b/.test(window.location.search)) {
+                jQuery('.pg a').each(function () {
+                    var pmUrl = jQuery(this).attr("href");
+                    if (pmUrl.includes("#last")) {
+                        pmUrl = pmUrl.replace('#last', '');
+                        jQuery(this).attr("href", pmUrl);
+                    }
+
+                    if (!jQuery(this).hasClass('nxt')) {
+                        jQuery(this).addClass('prev');
+                    }
+                });
+
+                if (/\bdo=pm\b/.test(window.location.search) || /\bac=pm\b/.test(window.location.search) ) {
+                    var pmFormUrl = jQuery('[id^=pmform]').attr('action');
+                    pmFormUrl = pmFormUrl.replace('mobile=yes', 'mobile=1');
+                    jQuery('[id^=pmform]').attr('action', pmFormUrl);
+
+                    /* Make reply box height auto grow */
+                    textAreaAutoGrow();
+                }
+            }
+
+
         });
     }
 
@@ -311,14 +344,18 @@ function runAfterLoad () {
             jQuery('body').append('<div class="debug-tool"><button class="copy-link">複製本頁鏈接</button></div>');
         }
         jQuery('.copy-link').click(function() {
-            window.prompt('你已複製鏈接', window.location.href);
+            var toBeCopy = window.location.href;
+            if (window.localStorage.getItem("copyUrl") == "desktop") {
+                toBeCopy = jQuery('.ft .xw0').last().attr("href");
+            }
+            window.prompt('你已複製鏈接', toBeCopy);
         });
     }, 800);
 }
 
 function customCSS () {
     var standardCustomCss = '<style>' +
-    'body.day-theme {
+    `body.day-theme {
         background-color: #FFF5D7;
     }
     .day-theme #menu-btn div {
@@ -672,12 +709,12 @@ function customCSS () {
     div.checkbox.switcher label input:checked + span small, div.radio.switcher label input:checked + span small {
       left: 50%;
     }
-    </style>';
+    </style>`;
     return standardCustomCss.replace(' ', '').replace('\n', '');
 }
 
 function photoSwipeHtml () {
-    return '<div id="pswp" class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    return `<div id="pswp" class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="pswp__bg"></div>
     <div class="pswp__scroll-wrap">
     <div class="pswp__container">
@@ -712,11 +749,11 @@ function photoSwipeHtml () {
     </div>
     </div>
     </div>
-    </div>';
+    </div>`;
 }
 
 function sideMenuHtml () {
-    return '<div id="side-menu">
+    return `<div id="side-menu">
     <div>
         <div class="menu-item">
             <span><b>閱讀設定：</b></span>
@@ -785,12 +822,23 @@ function sideMenuHtml () {
                 </label>
             </div>
         </div>
+        <div class="menu-item">
+            <span><b>複製鏈接設定：</b></span>
+        </div>
+        <div class="menu-item copy-link-div">
+            <label><span>標準版</span>
+                <input type="radio" name="copy-link" value="mobile1" id="copy-link-m1" checked>
+            </label>
+            <label><span>電腦版 </span>
+                <input type="radio" name="copy-link" value="desktop" id="copy-link-pc">
+            </label>
+        </div>
         <div class="menu-item last">
         </div>
         <div id="logout">
         </div>
     </div>
-</div>';
+</div>`;
 }
 
 function checkAndUpdateSetting() {
@@ -834,6 +882,17 @@ function checkAndUpdateSetting() {
         jQuery('#load-big-image').prop('checked', true);
     }else {
         window.localStorage.setItem("loadBigImageAtFirst", "false");
+    }
+
+    /* checking for copy link */
+    if (window.localStorage.getItem("copyUrl") !== "mobile1" && window.localStorage.getItem("copyUrl") !== "desktop") {
+        window.localStorage.setItem("copyUrl", "mobile1");
+    }else {
+        if (window.localStorage.getItem("copyUrl") == "mobile1") {
+            jQuery('#copy-link-m1').prop('checked', true);
+        }else{
+            jQuery('#copy-link-pc').prop('checked', true);
+        }
     }
 }
 
