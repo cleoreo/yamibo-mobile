@@ -4,7 +4,7 @@ function desktopLoadAtFirst () {
 	$.noConflict();
 	if (!/\bmobile=1\b/.test(window.location.search) && !/\bmobile=2\b/.test(window.location.search) && !/\bmobile=yes\b/.test(window.location.search)) {
 		/* Add Image overflow fixing CSS */
-		jQuery('body').css('min-width', '1024px');
+		jQuery('body').css('min-width', '1200px');
 		jQuery('head').append('<style>img { max-width: 100% !important; }</style>');
 		jQuery('head').append('<style>.batch-reply-checkbox { float: right; } #batch-reply, #copy-reply { float: left; border-radius: 20px; border: 3px solid white; padding: 3px 10px; margin-top: 8px; height: auto; } #scrollbottom { position: fixed; right: 0; top: 100px; display: block; margin: -30px 0 0 2px; width: 40px; background-color: #f4f4f4; border: 1px #cdcdcd solid; border-radius: 3px; cursor: pointer; } #scrollbottom a{ display: block; width: 30px; height: 24px; padding: 3px 5px; line-height: 12px; text-align: center; color: transparent; text-decoration: none; background: url(https://bbs.yamibo.com/template/oyeeh_com_baihe/img/shdm1020/scrolltop.png) no-repeat 0 0; -webkit-transform: rotate(180deg); -moz-transform: rotate(180deg); -ms-transform: rotate(180deg); -o-transform: rotate(180deg); transform: rotate(180deg);}</style>');
 
