@@ -67,9 +67,10 @@ public class MainActivity extends AppCompatActivity {
             webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
         }
 
-        // disable zoom
-        webSettings.setBuiltInZoomControls(false);
-        webSettings.setDisplayZoomControls(false);
+        // enable zoom
+        webSettings.setBuiltInZoomControls(true);
+//        webSettings.setBuiltInZoomControls(false);
+//        webSettings.setDisplayZoomControls(false);
 
         // if external link is detected, ask to open by external browser
         mWebView.setWebViewClient(new WebViewClient() {
@@ -121,6 +122,13 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 view.evaluateJavascript(readFromFile("photoswipe-ui-default.min.js"), new ValueCallback<String>() {
+                    @Override
+                    public void onReceiveValue(String value) {
+                        Log.d("", "value = " + value);
+                    }
+                });
+
+                view.evaluateJavascript(readFromFile("jquery.s2t.min.js"), new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String value) {
                         Log.d("", "value = " + value);
