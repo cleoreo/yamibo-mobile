@@ -1,9 +1,10 @@
+addEasterEgg();
+
 function addEasterEgg(){
-     if (/\bmobile=1\b/.test(window.location.search)) {
+    if (/\bmobile=1\b/.test(window.location.search)) {
         /* when inside a forum page */
         if (/\b&fid=\b/.test(window.location.search) && ! /\b&action=\b/.test(window.location.search)) {
             jQuery(document).ready(function () {
-
                 /* easter egg 1 */
                 if ((/\b&fid=30\b/.test(window.location.search) && /\b&typeid=227\b/.test(window.location.search)) ||
                     (/\b&fid=49\b/.test(window.location.search) && /\b&typeid=125\b/.test(window.location.search))) {
@@ -32,13 +33,11 @@ function addEasterEgg(){
                     if(/\bfaith\b/.test(jQuery(this).text())){
                         jQuery(this).parent().parent().addClass('faith');
                     }
-                });}
-            }
+                });
+            });
         }
-     }
+    }
 }
-
-addEasterEgg();
 
 function easterEggCSS (){
     return '<style>'+ '
