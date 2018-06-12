@@ -15,16 +15,16 @@ function addEasterEgg(){
                 /* easter egg 2 */
                 jQuery('.bm .bm_c a').each(function(){
                     var postName = jQuery(this).html();
-                    postName = postName.replace('[H]', '【<i class="fa fa-venus-double fa-fw" aria-hidden="true" style="font-weight: bold;"></i>】');
-                    postName = postName.replace('(H)', '【<i class="fa fa-venus-double fa-fw" aria-hidden="true" style="font-weight: bold;"></i>】');
-                    postName = postName.replace('（H）', '【<i class="fa fa-venus-double fa-fw" aria-hidden="true" style="font-weight: bold;"></i>】');
-                    postName = postName.replace('【H】', '【<i class="fa fa-venus-double fa-fw" aria-hidden="true" style="font-weight: bold;"></i>】');
-                    postName = postName.replace('(18X)', '【<i class="fa fa-venus-double fa-fw" aria-hidden="true" style="font-weight: bold;"></i>】');
-                    postName = postName.replace('（18X）', '【<i class="fa fa-venus-double fa-fw" aria-hidden="true" style="font-weight: bold;"></i>】');
-                    postName = postName.replace('（車）', '【<i class="fa fa-venus-double fa-fw" aria-hidden="true" style="font-weight: bold;"></i>】');
-                    postName = postName.replace('(車)', '【<i class="fa fa-venus-double fa-fw" aria-hidden="true" style="font-weight: bold;"></i>】');
-                    postName = postName.replace('[車]', '【<i class="fa fa-venus-double fa-fw" aria-hidden="true" style="font-weight: bold;"></i>】');
-                    postName = postName.replace('【車】', '【<i class="fa fa-venus-double fa-fw" aria-hidden="true" style="font-weight: bold;"></i>】');
+                    postName = postName.replace('[H]', '【<i class="fas fa-venus-double"></i>】');
+                    postName = postName.replace('(H)', '【<i class="fas fa-venus-double"></i>】');
+                    postName = postName.replace('（H）', '【<i class="fas fa-venus-double"></i>】');
+                    postName = postName.replace('【H】', '【<i class="fas fa-venus-double"></i>】');
+                    postName = postName.replace('(18X)', '【<i class="fas fa-venus-double"></i>】');
+                    postName = postName.replace('（18X）', '【<i class="fas fa-venus-double"></i>】');
+                    postName = postName.replace('（車）', '【<i class="fas fa-venus-double"></i>】');
+                    postName = postName.replace('(車)', '【<i class="fas fa-venus-double"></i>】');
+                    postName = postName.replace('[車]', '【<i class="fas fa-venus-double"></i>】');
+                    postName = postName.replace('【車】', '【<i class="fas fa-venus-double"></i>】');
                     jQuery(this).html(postName);
                 });
 
