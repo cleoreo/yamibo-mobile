@@ -128,6 +128,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
+                view.evaluateJavascript(readFromFile("fontawesome-all.min.js"), new ValueCallback<String>() {
+                    @Override
+                    public void onReceiveValue(String value) {
+                        Log.d("", "value = " + value);
+                    }
+                });
+
                 view.evaluateJavascript(readFromFile("jquery.s2t.min.js"), new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String value) {
