@@ -156,6 +156,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
+                view.evaluateJavascript(readFromFile("easter-egg.js"), new ValueCallback<String>() {
+                    @Override
+                    public void onReceiveValue(String value) {
+                        Log.d("", "value = " + value);
+                    }
+                });
+
 
                 mSwipeRefreshLayout.setRefreshing(false);
                 view.setVisibility(View.VISIBLE);
