@@ -86,7 +86,7 @@ function mobile1SetUp () {
       body.append(scrollBtnHtml());
     }
     if (historyBtn.length === 0) {
-      head.append(historyBtnHtml());
+      body.append(historyBtnHtml());
     }
 
     /* add menu button */
