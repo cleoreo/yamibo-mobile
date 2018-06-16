@@ -1,70 +1,73 @@
 desktopLoadAtFirst();
 
 function desktopLoadAtFirst () {
-  $.noConflict();
   if (!/\bmobile=1\b/.test(window.location.search) && !/\bmobile=2\b/.test(window.location.search) && !/\bmobile=yes\b/.test(window.location.search)) {
     /* Add Image overflow fixing CSS */
     jQuery('body').css('min-width', '1200px');
     jQuery('head').append('<style>img { max-width: 100% !important; }</style>');
     jQuery('head').append('<style>.go-mobile-btn {display: inline-block;width: 100%;border: 1px solid #551200;background-color: #551200;color: #ffffff; padding: 10px; font-size: 1rem;} .batch-reply-checkbox { float: right; } #batch-reply, #copy-reply { float: left; border-radius: 20px; border: 3px solid white; padding: 3px 10px; margin-top: 8px; height: auto; } #scrollbottom { position: fixed; right: 0; top: 100px; display: block; margin: -30px 0 0 2px; width: 40px; background-color: #f4f4f4; border: 1px #cdcdcd solid; border-radius: 3px; cursor: pointer; } #scrollbottom a{ display: block; width: 30px; height: 24px; padding: 3px 5px; line-height: 12px; text-align: center; color: transparent; text-decoration: none; background: url(https://bbs.yamibo.com/template/oyeeh_com_baihe/img/shdm1020/scrolltop.png) no-repeat 0 0; -webkit-transform: rotate(180deg); -moz-transform: rotate(180deg); -ms-transform: rotate(180deg); -o-transform: rotate(180deg); transform: rotate(180deg);}</style>');
 
-    /* Add go to bottom button */
-    jQuery('body').append('<div id=\'scrollbottom\'><span hidefocus=\'true\'><a title=\'去最底\' onclick=\'window.scrollTo(0,document.body.scrollHeight);\'><b>去最底</b></a></span></div>');
+    jQuery(document).ready(function () {
+      /* Add go to bottom button */
+      jQuery('body').append('<div id=\'scrollbottom\'><span hidefocus=\'true\'><a title=\'去最底\' onclick=\'window.scrollTo(0,document.body.scrollHeight);\'><b>去最底</b></a></span></div>');
 
-    /* Add go to mobile button */
-    if (jQuery('.go-mobile').length === 0) {
-      jQuery('body').prepend('<div class="go-mobile"><button class="go-mobile-btn">前往手機標準版</button></div>');
-    }
-    jQuery('.go-mobile-btn').click(function () {
-      var goToLink = window.location.href;
+      /* Add go to mobile button */
+      if (jQuery('.go-mobile').length === 0) {
+        jQuery('body').prepend('<div class="go-mobile"><button class="go-mobile-btn">前往手機標準版</button></div>');
 
-      if (/\bmobile=no\b/.test(window.location.search)) {
-        goToLink = goToLink.replace("mobile=no", "mobile=1");
-      } else if (goToLink.split('#').length > 0) {
-        goToLink = goToLink.split('#')[0] + "&mobile=1" + "#" + goToLink.split('#')[1];
-      } else if (gotolink.split('?').length > 0) {
-        goToLink = goToLink + "&mobile=1";
-      } else {
-        goToLink = goToLink + "mobile=1";
-      }
-      window.location = goToLink;
-    });
+        jQuery('.go-mobile-btn').click(function () {
+          var goToLink = window.location.href;
 
-    var postHeader = jQuery('#postlist >table').first().find('td:last-of-type .y').first();
-
-    if (postHeader.length > 0) {
-      if (jQuery('#select-all-comment').length == 0) {
-        postHeader.prepend('<a id=\'select-all-comment\' href=\'javascript:void(0);\'>全選/取消</a>');
-        addCheckbox();
-
-        jQuery('#select-all-comment').click(function () {
-          if (jQuery('.batch-reply-checkbox').length === jQuery('.batch-reply-checkbox:checked').length) {
-            jQuery('.batch-reply-checkbox').prop('checked', false);
+          if (/\bmobile=no\b/.test(window.location.search)) {
+            goToLink = goToLink.replace("mobile=no", "mobile=1");
+          } else if (goToLink.split('#').length > 0) {
+            goToLink = goToLink.split('#')[0] + "&mobile=1" + "#" + goToLink.split('#')[1];
+          } else if (gotolink.split('?').length > 0) {
+            goToLink = goToLink + "&mobile=1";
           } else {
-            jQuery('.batch-reply-checkbox').prop('checked', true);
+            goToLink = goToLink + "mobile=1";
           }
-
-        });
-
-        var paginationDiv = jQuery('#modactions').next('div');
-        paginationDiv.append('<button id=\'batch-reply\' class=\'pn pnc vm\' type=\'button\'>批量回覆</button>');
-        paginationDiv.append('<button id=\'copy-reply\' class=\'pn pnc vm\' type=\'button\'>僅複製留言引用</button>');
-
-
-        jQuery('#batch-reply').click(function () {
-          openReplyPageInNewTab();
-        });
-
-        jQuery('#copy-reply').click(function () {
-          copyAllQuoteComments();
+          window.location = goToLink;
         });
       }
-    }
 
-    if (jQuery('#editorbox').length > 0 && getUrlParameter('action') == 'reply' && window.localStorage.getItem('quotedComment').length > 0) {
-      newEditor(1, bbcode2html(window.localStorage.getItem('quotedComment')));
-      window.localStorage.removeItem('quotedComment');
-    }
+
+      var postHeader = jQuery('#postlist >table').first().find('td:last-of-type .y').first();
+
+      if (postHeader.length > 0) {
+        if (jQuery('#select-all-comment').length == 0) {
+          postHeader.prepend('<a id=\'select-all-comment\' href=\'javascript:void(0);\'>全選/取消</a>');
+          addCheckbox();
+
+          jQuery('#select-all-comment').click(function () {
+            if (jQuery('.batch-reply-checkbox').length === jQuery('.batch-reply-checkbox:checked').length) {
+              jQuery('.batch-reply-checkbox').prop('checked', false);
+            } else {
+              jQuery('.batch-reply-checkbox').prop('checked', true);
+            }
+
+          });
+
+          var paginationDiv = jQuery('#modactions').next('div');
+          paginationDiv.append('<button id=\'batch-reply\' class=\'pn pnc vm\' type=\'button\'>批量回覆</button>');
+          paginationDiv.append('<button id=\'copy-reply\' class=\'pn pnc vm\' type=\'button\'>僅複製留言引用</button>');
+
+
+          jQuery('#batch-reply').click(function () {
+            openReplyPageInNewTab();
+          });
+
+          jQuery('#copy-reply').click(function () {
+            copyAllQuoteComments();
+          });
+        }
+      }
+
+      if (jQuery('#editorbox').length > 0 && getUrlParameter('action') == 'reply' && window.localStorage.getItem('quotedComment').length > 0) {
+        newEditor(1, bbcode2html(window.localStorage.getItem('quotedComment')));
+        window.localStorage.removeItem('quotedComment');
+      }
+    });
   }
 }
 
