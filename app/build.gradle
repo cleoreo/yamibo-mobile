@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.yamibo.android.yamibo_webview"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 27
         versionName '1.2.5'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
