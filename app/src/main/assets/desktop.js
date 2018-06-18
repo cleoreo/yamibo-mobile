@@ -20,12 +20,12 @@ function desktopLoadAtFirst () {
 
           if (/\bmobile=no\b/.test(window.location.search)) {
             goToLink = goToLink.replace("mobile=no", "mobile=1");
-          } else if (goToLink.split('#').length > 0) {
+          } else if (goToLink.split('#').length > 1) {
             goToLink = goToLink.split('#')[0] + "&mobile=1" + "#" + goToLink.split('#')[1];
-          } else if (gotolink.split('?').length > 0) {
+          } else if (goToLink.split('?').length > 1) {
             goToLink = goToLink + "&mobile=1";
           } else {
-            goToLink = goToLink + "mobile=1";
+            goToLink = goToLink + "?mobile=1";
           }
           window.location = goToLink;
         });
