@@ -260,12 +260,13 @@ function postPageSetUp () {
     jQuery('.postmessage a').each(function () {
       var href = jQuery(this).attr('href');
       if (/\bbbs.yamibo.com\b/.test(href)) {
-        if (/\bmobile=yes\b/.test(href) || /\bmobile=2\b/.test(href)) {
+        if (/\bmobile=yes\b/.test(href) || /\bmobile=2\b/.test(href) || /\bmobile=no\b/.test(href)) {
           href = href.replace('mobile=yes', 'mobile=1');
+          href = href.replace('mobile=no', 'mobile=1');
           href = href.replace('mobile=2', 'mobile=1');
         } else {
           if (href.split('?').length > 1) {
-            href = href + '&mobile=1';
+            href = href.split('?')[0] + '?mobile=1&' + href.split('?')[1];
           } else {
             if (href.slice(-1) === "/") {
               href = href + "forum.php?mobile=1";
