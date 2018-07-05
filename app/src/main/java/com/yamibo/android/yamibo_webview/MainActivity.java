@@ -3,6 +3,7 @@ package com.yamibo.android.yamibo_webview;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -72,6 +73,12 @@ public class MainActivity extends AppCompatActivity {
 //        webSettings.setBuiltInZoomControls(false);
 //        webSettings.setDisplayZoomControls(false);
 
+        // set up a progress dialog
+        final ProgressDialog progressDialog = new ProgressDialog(this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
+        progressDialog.setMessage("加載中");
+        progressDialog.setCancelable(true);
+        progressDialog.setIndeterminate(true);
+
         // if external link is detected, ask to open by external browser
         mWebView.setWebViewClient(new WebViewClient() {
 
@@ -99,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 // disable Image Auto load for every page
                 view.getSettings().setLoadsImagesAutomatically(false);
 
-                view.setVisibility(View.INVISIBLE);
+                progressDialog.show();
             }
 
             @Override
@@ -157,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 mSwipeRefreshLayout.setRefreshing(false);
-                view.setVisibility(View.VISIBLE);
+                progressDialog.dismiss();
 
                 // load image after javascript is injected
                 view.getSettings().setLoadsImagesAutomatically(true);
